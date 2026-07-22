@@ -2,33 +2,50 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Cath by Sai Prathek">
-    <title>Cath</title>
-    <style>
-      :root { color-scheme: dark; }
-      * { box-sizing: border-box; }
-      body {
-        min-height: 100vh;
-        margin: 0;
-        display: grid;
-        place-items: center;
-        padding: 2rem;
-        background: #111827;
-        color: #f9fafb;
-        font: 16px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      }
-      main { width: min(100%, 42rem); }
-      h1 { margin: 0; font-size: clamp(3rem, 12vw, 6rem); letter-spacing: -.07em; }
-      p { max-width: 33rem; margin: 1rem 0 0; color: #cbd5e1; font-size: 1.2rem; }
-      .tag { color: #67e8f9; font-weight: 650; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#201640">
+    <meta name="description" content="Catherine's Bagel Quest — a tiny birthday adventure from Sai.">
+    <title>Catherine's Bagel Quest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <main>
-      <span class="tag">saiprathek.com/cath</span>
-      <h1>Cath</h1>
-      <p>A small corner of the web, currently taking shape.</p>
+    <main class="page-shell">
+      <section class="game-card" aria-label="Catherine's Bagel Quest game">
+        <div class="ornament ornament-left">✦</div><div class="ornament ornament-right">✦</div>
+        <header class="game-header">
+          <div class="brand"><span class="brand-bagel">◉</span><span>Bagel Quest</span></div>
+          <div class="rescues" aria-live="polite"><span>PRETZELS RESCUED</span><strong id="score">0 / 5</strong></div>
+        </header>
+        <div class="game-stage">
+          <canvas id="game" width="960" height="540" aria-label="A game where Sir Bagel rescues pretzels from donut monsters"></canvas>
+          <div class="toast" id="toast" aria-live="polite"></div>
+          <section class="panel intro-panel" id="introPanel">
+            <p class="eyebrow">A birthday adventure for</p>
+            <h1>Catherine’s<br><em>Bagel Quest</em></h1>
+            <p class="intro-copy">The Donut Legion has captured five tiny pretzels. Sir Bagel needs your help to bring them home.</p>
+            <button class="button primary" id="startButton">Begin the quest <span>→</span></button>
+            <p class="tiny">Move, throw cream cheese, rescue every pretzel.</p>
+          </section>
+          <section class="panel win-panel hidden" id="winPanel">
+            <div class="crown">♕</div>
+            <p class="eyebrow">Quest complete</p>
+            <h2>You saved the<br><em>Pretzel Kingdom!</em></h2>
+            <p>Happy birthday, Catherine. A little something awaits you, from Sai.</p>
+            <a class="button primary gift-link" id="giftLink" href="#" target="_blank" rel="noopener">Open your gift <span>🎁</span></a>
+            <button class="button secondary" id="againButton">Play again</button>
+            <p class="tiny">Love, Sai</p>
+          </section>
+        </div>
+        <div class="controls" aria-label="Game controls">
+          <div class="d-pad"><button class="control" data-key="left" aria-label="Move left">←</button><button class="control" data-key="right" aria-label="Move right">→</button></div>
+          <button class="throw" data-key="throw" aria-label="Throw cream cheese"><span>●</span><small>THROW</small></button>
+        </div>
+        <footer><span>Tap to move</span><span class="dot">•</span><span>Defeat the donuts</span><span class="dot">•</span><span>Save the pretzels</span></footer>
+      </section>
     </main>
+    <script src="game.js"></script>
   </body>
 </html>
