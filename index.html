@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/cath/styles.css?v=3">
+  <link rel="stylesheet" href="/cath/styles.css?v=4">
 </head>
 <body>
   <main class="shell">
@@ -27,7 +27,7 @@
           <div class="hud-card hearts" aria-label="Health"><span id="hearts">♥ ♥ ♥</span></div>
           <div class="hud-card cream"><span class="cream-dot">●</span><span id="cream">6</span><small>SCHMEAR</small></div>
           <div class="hud-card rescued"><span>♢</span><strong id="rescued">0/5</strong><small>RESCUED</small></div>
-          <div class="ability-pill" id="abilityPill">No relic yet</div>
+          <div class="goal-pill" id="goalPill">Find the pretzels →</div>
         </div>
 
         <div class="boss-hud hidden" id="bossHud"><span id="bossName">KING GLAZEBALD</span><div><i id="bossBar"></i></div></div>
@@ -85,23 +85,10 @@
           <p class="signature">Love, Sai</p>
         </section>
 
-        <div class="rotate-hint"><span>↻</span> Turn your phone sideways for the best adventure</div>
       </div>
-
-      <div class="controls hidden" id="controls" aria-label="Touch controls">
-        <div class="control-group move-controls">
-          <button data-key="left" aria-label="Move left">←</button>
-          <button data-key="right" aria-label="Move right">→</button>
-        </div>
-        <div class="control-group action-controls">
-          <button class="ability-control" data-key="ability" aria-label="Use ability"><span>✦</span><small>ABILITY</small></button>
-          <button data-key="shoot" aria-label="Throw cream cheese"><span>●</span><small>THROW</small></button>
-          <button class="jump-control" data-key="jump" aria-label="Jump"><span>↑</span><small>JUMP</small></button>
-        </div>
-      </div>
-      <footer><span>Move: A D / ← →</span><i>•</i><span>Jump: Space</span><i>•</i><span>Throw: J</span><i>•</i><span>Ability: K</span></footer>
+      <footer><span>Move: A D / ← →</span><i>•</i><span>Jump: Space</span><i>•</i><span>Throw: J</span></footer>
     </section>
   </main>
-  <script src="/cath/game.js?v=3"></script>
+  <script src="/cath/game.js?v=4"></script>
 </body>
 </html>
