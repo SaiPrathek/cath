@@ -1,51 +1,107 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#201640">
-    <meta name="description" content="Catherine's Bagel Quest — a tiny birthday adventure from Sai.">
-    <title>Catherine's Bagel Quest</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/cath/styles.css">
-  </head>
-  <body>
-    <main class="page-shell">
-      <section class="game-card" aria-label="Catherine's Bagel Quest game">
-        <div class="ornament ornament-left">✦</div><div class="ornament ornament-right">✦</div>
-        <header class="game-header">
-          <div class="brand"><span class="brand-bagel">◉</span><span>Bagel Quest</span></div>
-          <div class="rescues" aria-live="polite"><span>PRETZELS RESCUED</span><strong id="score">0 / 5</strong></div>
-        </header>
-        <div class="game-stage">
-          <canvas id="game" width="960" height="540" aria-label="A game where Sir Bagel rescues pretzels from donut monsters"></canvas>
-          <div class="toast" id="toast" aria-live="polite"></div>
-          <section class="panel intro-panel" id="introPanel">
-            <p class="eyebrow">A birthday adventure for</p>
-            <h1>Catherine’s<br><em>Bagel Quest</em></h1>
-            <p class="intro-copy">The Donut Legion has captured five tiny pretzels. Sir Bagel needs your help to bring them home.</p>
-            <button class="button primary" id="startButton">Begin the quest <span>→</span></button>
-            <p class="tiny">Move, throw cream cheese, rescue every pretzel.</p>
-          </section>
-          <section class="panel win-panel hidden" id="winPanel">
-            <div class="crown">♕</div>
-            <p class="eyebrow">Quest complete</p>
-            <h2>You saved the<br><em>Pretzel Kingdom!</em></h2>
-            <p>Happy birthday, Catherine. A little something awaits you, from Sai.</p>
-            <a class="button primary gift-link" id="giftLink" href="#" target="_blank" rel="noopener">Open your gift <span>🎁</span></a>
-            <button class="button secondary" id="againButton">Play again</button>
-            <p class="tiny">Love, Sai</p>
-          </section>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#24183f">
+  <meta name="description" content="Catherine and the Curse of King Glazebald — a birthday platformer by Sai.">
+  <title>Catherine and the Curse of King Glazebald</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/cath/styles.css?v=3">
+</head>
+<body>
+  <main class="shell">
+    <section class="game-card" aria-label="Catherine's birthday platformer">
+      <header class="topbar">
+        <div class="brand"><span class="brand-mark">◎</span><span>Cat’s Bagel Quest</span></div>
+        <div class="stage-name"><small id="actLabel">THE STORY BEGINS</small><strong id="levelLabel">Twistwick</strong></div>
+        <button class="icon-button" id="muteButton" aria-label="Toggle sound">♪</button>
+      </header>
+
+      <div class="viewport">
+        <canvas id="game" width="960" height="540" aria-label="Platform game canvas"></canvas>
+
+        <div class="hud hidden" id="hud">
+          <div class="hud-card hearts" aria-label="Health"><span id="hearts">♥ ♥ ♥</span></div>
+          <div class="hud-card cream"><span class="cream-dot">●</span><span id="cream">6</span><small>SCHMEAR</small></div>
+          <div class="hud-card rescued"><span>♢</span><strong id="rescued">0/5</strong><small>RESCUED</small></div>
+          <div class="ability-pill" id="abilityPill">No relic yet</div>
         </div>
-        <div class="controls" aria-label="Game controls">
-          <div class="d-pad"><button class="control" data-key="left" aria-label="Move left">←</button><button class="control" data-key="right" aria-label="Move right">→</button></div>
-          <button class="throw" data-key="throw" aria-label="Throw cream cheese"><span>●</span><small>THROW</small></button>
+
+        <div class="boss-hud hidden" id="bossHud"><span id="bossName">KING GLAZEBALD</span><div><i id="bossBar"></i></div></div>
+        <div class="toast" id="toast" aria-live="polite"></div>
+
+        <section class="title-card overlay" id="titleScreen">
+          <p class="eyebrow">A birthday adventure for Catherine</p>
+          <h1>Catherine <small>and the curse of</small><em>King Glazebald</em></h1>
+          <div class="title-cast"><span>🥨</span><span class="hero-medallion">◎</span><span>🍩</span></div>
+          <p>The Pretzel People have been taken. One extremely under-caffeinated bagel girl must save them.</p>
+          <button class="button primary" id="startButton">Open the storybook <b>→</b></button>
+          <button class="text-button" id="continueButton">Skip story &amp; play</button>
+        </section>
+
+        <section class="story-card overlay hidden" id="storyScreen">
+          <div class="page-number" id="pageNumber">1 / 5</div>
+          <div class="story-art" id="storyArt" aria-hidden="true"></div>
+          <div class="story-copy">
+            <p class="eyebrow" id="storyKicker">Twistwick, yesterday</p>
+            <h2 id="storyTitle">A perfectly twisted town</h2>
+            <p id="storyText"></p>
+            <blockquote id="storyQuote"></blockquote>
+          </div>
+          <div class="story-actions">
+            <button class="text-button" id="skipStory">Skip story</button>
+            <button class="button primary" id="nextStory">Next <b>→</b></button>
+          </div>
+        </section>
+
+        <section class="level-card overlay hidden" id="levelScreen">
+          <p class="eyebrow" id="levelKicker">ACT I</p>
+          <h2 id="levelTitle">Crumbly Commons</h2>
+          <p id="levelDescription"></p>
+          <div class="mission" id="levelMission"></div>
+          <button class="button primary" id="levelButton">Enter the level <b>→</b></button>
+        </section>
+
+        <section class="dialogue hidden" id="dialogue" aria-live="polite">
+          <div class="portrait" id="portrait">◎</div>
+          <div><strong id="speaker">Cat Crumbwell</strong><p id="dialogueText"></p></div>
+          <button id="dialogueNext" aria-label="Continue dialogue">›</button>
+        </section>
+
+        <section class="ending-card overlay hidden" id="endingScreen">
+          <div class="gift-seal">🥨</div>
+          <p class="eyebrow">Quest complete • Twistwick saved</p>
+          <h2>Happy Birthday,<br><em>Catherine!</em></h2>
+          <p id="endingText">You defeated the Donut Legion and rescued every Pretzel Person.</p>
+          <div class="final-joke">
+            <strong>Cat:</strong> “You’re rewarding me for saving pretzels… with money to eat pretzels?”<br>
+            <strong>Auntie Saltina:</strong> “We prefer not to examine the economics too closely.”
+          </div>
+          <a class="button primary gift-button" id="giftLink" href="#" target="_blank" rel="noopener">Open the Auntie Anne’s gift <b>🎁</b></a>
+          <button class="text-button" id="playAgain">Play the adventure again</button>
+          <p class="signature">Love, Sai</p>
+        </section>
+
+        <div class="rotate-hint"><span>↻</span> Turn your phone sideways for the best adventure</div>
+      </div>
+
+      <div class="controls hidden" id="controls" aria-label="Touch controls">
+        <div class="control-group move-controls">
+          <button data-key="left" aria-label="Move left">←</button>
+          <button data-key="right" aria-label="Move right">→</button>
         </div>
-        <footer><span>Tap to move</span><span class="dot">•</span><span>Defeat the donuts</span><span class="dot">•</span><span>Save the pretzels</span></footer>
-      </section>
-    </main>
-    <script src="/cath/game.js"></script>
-  </body>
+        <div class="control-group action-controls">
+          <button class="ability-control" data-key="ability" aria-label="Use ability"><span>✦</span><small>ABILITY</small></button>
+          <button data-key="shoot" aria-label="Throw cream cheese"><span>●</span><small>THROW</small></button>
+          <button class="jump-control" data-key="jump" aria-label="Jump"><span>↑</span><small>JUMP</small></button>
+        </div>
+      </div>
+      <footer><span>Move: A D / ← →</span><i>•</i><span>Jump: Space</span><i>•</i><span>Throw: J</span><i>•</i><span>Ability: K</span></footer>
+    </section>
+  </main>
+  <script src="/cath/game.js?v=3"></script>
+</body>
 </html>
