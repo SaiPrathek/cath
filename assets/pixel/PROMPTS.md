@@ -20,6 +20,8 @@ Versioned `story-3-v2.png`, `story-4-v2.png`, and `story-5-v2.png` implement the
 
 `story-6-v1.png` is the illustrated victory panel. It uses scenes 3 and 5 as visual references and shows curly-haired Cat standing triumphant with her sling and buckler, Glazebald comically defeated beside his fallen crown, and the rescued Pretzel People cheering in the raspberry fortress at sunrise.
 
+`cast-lineup-v1.png` and the `portrait-*-v1.png` crops use the supplied detailed Roman-bakery character lineup as their visual reference. The production edit preserves the five roles, upgrades Cat with visible dark-brown curls, removes the flat chroma-key background, and supplies the title screen, top bar, HUD, gift seal, and dialogue portraits with consistent high-detail pixel artwork.
+
 ## Gameplay environments — second art pass
 
 Each level received a dedicated 16:9 background plate in the same Roman-bakery pixel style, with three visual depth layers, dark plum outlines, selective dithering, dense material detail, no characters, no HUD, and a readable lower playfield.
