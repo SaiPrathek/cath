@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/cath/styles.css?v=15">
+  <link rel="stylesheet" href="/cath/styles.css?v=16">
 </head>
 <body>
   <main class="shell">
@@ -101,6 +101,24 @@
           <button id="dialogueNext" aria-label="Continue dialogue">›</button>
         </section>
 
+        <section class="victory-card overlay hidden" id="victoryScreen">
+          <div class="victory-art">
+            <canvas id="victoryCanvas" width="320" height="180" role="img" aria-label="Cat Crumbwell celebrates after defeating King Glazebald while the rescued pretzels cheer"></canvas>
+          </div>
+          <div class="victory-copy">
+            <p class="eyebrow">Victory in the Glazed Gauntlet</p>
+            <h2>The crown comes off</h2>
+            <p>Cat’s final cream-cheese shot sends Glazebald’s crown skidding across the throne room. Twistwick is free.</p>
+            <div class="victory-dialogue">
+              <strong>King Glazebald:</strong> “I demand a rematch!”<br>
+              <strong>Cat:</strong> “Is it your birthday?”<br>
+              <strong>King Glazebald:</strong> “No.”<br>
+              <strong>Cat:</strong> “Then wait your turn.”
+            </div>
+            <button class="button primary" id="victoryButton">Continue to the reward <b>→</b></button>
+          </div>
+        </section>
+
         <section class="ending-card overlay hidden" id="endingScreen">
           <div class="gift-seal">🥨</div>
           <p class="eyebrow">Quest complete • Twistwick saved</p>
@@ -121,6 +139,6 @@
     </section>
   </main>
   <script src="/cath/assets/pixel/sprite-frames.js?v=14"></script>
-  <script src="/cath/game.js?v=16"></script>
+  <script src="/cath/game.js?v=17"></script>
 </body>
 </html>
