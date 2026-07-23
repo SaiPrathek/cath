@@ -18,8 +18,8 @@ const STORY = [
     ['Mayor Twistopher','Citizens! Today’s celebration must be perfect.'],
     ['Little Loop','The birthday banner is upside down.'],
     ['Mayor Twistopher','Then it is perfectly upside down.'],
-    ['Pretzel Citizen','Is that enormous shadow part of the entertainment?'],
-    ['Mayor Twistopher','I’m going to say yes until it becomes dangerous.',true]
+    ['Pretzel Citizen','Is that trumpet fanfare part of the entertainment?'],
+    ['Mayor Twistopher','No. Ours is much less aggressive.',true]
   ]},
   {image:'story2',kicker:'Unfortunately • it becomes dangerous',title:'An emperor without an invitation',text:'Emperor Prathek Donutwell crashes his frosting-powered chariot into the fountain, arriving with exactly the amount of ceremony nobody requested.',pan:[0,0],beats:[
     ['Mayor Twistopher','Prathek, this celebration is for Catherine.'],
