@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/cath/styles.css?v=7">
+  <link rel="stylesheet" href="/cath/styles.css?v=8">
 </head>
 <body>
   <main class="shell">
@@ -58,11 +58,18 @@
             <p class="eyebrow" id="storyKicker">Twistwick, yesterday</p>
             <h2 id="storyTitle">A perfectly twisted town</h2>
             <p id="storyText"></p>
-            <blockquote id="storyQuote"></blockquote>
+            <div class="story-dialogue" id="storyDialogue">
+              <div class="story-portrait"><canvas id="storyPortraitCanvas" width="48" height="48" aria-hidden="true"></canvas></div>
+              <div>
+                <strong id="storySpeaker">Mayor Twistopher</strong>
+                <p id="storyQuote"></p>
+              </div>
+            </div>
+            <div class="beat-dots" id="storyBeatDots" aria-label="Scene dialogue progress"></div>
           </div>
           <div class="story-actions">
             <button class="text-button" id="skipStory">Skip story</button>
-            <button class="button primary" id="nextStory">Next <b>→</b></button>
+            <button class="button primary" id="nextStory">Continue <b>→</b></button>
           </div>
         </section>
 
@@ -87,7 +94,8 @@
           <p id="endingText">You defeated the Donut Legion and rescued every Pretzel Person.</p>
           <div class="final-joke">
             <strong>Cat:</strong> “You’re rewarding me for saving pretzels… with money to eat pretzels?”<br>
-            <strong>Auntie Saltina:</strong> “We prefer not to examine the economics too closely.”
+            <strong>Mayor Twistopher:</strong> “We did not think this through.”<br>
+            <strong>Cat:</strong> “Absolutely not giving it back.”
           </div>
           <a class="button primary gift-button" id="giftLink" href="#" target="_blank" rel="noopener">Open the Auntie Anne’s gift <b>🎁</b></a>
           <button class="text-button" id="playAgain">Play the adventure again</button>
@@ -98,7 +106,7 @@
       <footer><span>Move: A D / ← →</span><i>•</i><span>Jump: Space</span><i>•</i><span>Throw: J</span></footer>
     </section>
   </main>
-  <script src="/cath/assets/pixel/sprite-frames.js?v=7"></script>
-  <script src="/cath/game.js?v=7"></script>
+  <script src="/cath/assets/pixel/sprite-frames.js?v=8"></script>
+  <script src="/cath/game.js?v=8"></script>
 </body>
 </html>

@@ -5,18 +5,51 @@ const ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = false;
 const W = 960, H = 540;
 
-const ui = Object.fromEntries(['loadingScreen','loadingStatus','retryLoad','titleScreen','storyScreen','storyImage','levelScreen','endingScreen','hud','controls','dialogue','toast','bossHud','actLabel','levelLabel','hearts','cream','rescued','goalPill','bossName','bossBar','storyKicker','storyTitle','storyText','storyQuote','pageNumber','levelKicker','levelTitle','levelDescription','levelMission','portraitCanvas'].map(id=>[id,document.querySelector('#'+id)]));
+const ui = Object.fromEntries(['loadingScreen','loadingStatus','retryLoad','titleScreen','storyScreen','storyImage','storyDialogue','storySpeaker','storyBeatDots','storyPortraitCanvas','levelScreen','endingScreen','hud','controls','dialogue','toast','bossHud','actLabel','levelLabel','hearts','cream','rescued','goalPill','bossName','bossBar','storyKicker','storyTitle','storyText','storyQuote','pageNumber','levelKicker','levelTitle','levelDescription','levelMission','portraitCanvas'].map(id=>[id,document.querySelector('#'+id)]));
 document.querySelector('#giftLink').href = GIFT_LINK;
 const ASSET_ROOT='/cath/assets/pixel/';
 const images={};
 const ASSET_FILES={sprites:'sprites.png',tiles:'tiles.png',commons:'background-commons-v3.png',factory:'background-sprinkleworks-v3.png',castle:'background-gauntlet-v3.png',story1:'story-1.png',story2:'story-2.png',story3:'story-3.png',story4:'story-4.png',story5:'story-5.png'};
 
 const STORY = [
-  {image:'story1',kicker:'Twistwick • one peaceful morning',title:'A perfectly twisted town',text:'The Pretzel People were preparing for Catherine’s birthday. Banners were hung, cakes were baked, and nobody could agree which way was up.',quote:'Mayor Twistopher: “This festival will go exactly as planned.”'},
-  {image:'story2',kicker:'Unfortunately • five minutes later',title:'Enter King Glazebald',text:'A frosting-powered chariot darkened the sky. King Glazebald the Holehearted and his Donut Legion demanded the town surrender.',quote:'Glazebald: “Your celebration has insufficient frosting!”'},
-  {image:'story3',kicker:'The great sprinkle raid',title:'The pretzels are taken',text:'The Legion trapped five townspeople in candy cages and stole the Golden Salt Crystals that protected Twistwick.',quote:'Mayor: “We have mustard?”  Glazebald: “Revolting. Arrest everyone.”'},
-  {image:'story4',kicker:'Meanwhile • Cat’s breakfast',title:'A knock at the door',text:'The escapees found Catherine “Cat” Crumbwell: bagel girl, reluctant hero, and owner of one rapidly cooling coffee.',quote:'Cat: “Have you considered calling someone who isn’t eating breakfast?”'},
-  {image:'story5',kicker:'A heroic sigh later',title:'The Cream Cheese Sling',text:'Auntie Saltina handed Cat the ancient sling. She fastened her cape, adjusted her Roman helmet, and accepted the quest.',quote:'Cat: “Fine. But this counts as cardio.”'}
+  {image:'story1',kicker:'Twistwick • one peaceful morning',title:'A perfectly twisted birthday',text:'The Pretzel People prepare a celebration for Catherine. Nothing is on fire yet.',pan:[-5,1],beats:[
+    ['Mayor Twistopher','Citizens! Today’s celebration must be perfect.'],
+    ['Little Loop','The birthday banner is upside down.'],
+    ['Mayor Twistopher','Then it is perfectly upside down.'],
+    ['Pretzel Citizen','Is that enormous shadow part of the entertainment?'],
+    ['Mayor Twistopher','I’m going to say yes until it becomes dangerous.',true]
+  ]},
+  {image:'story2',kicker:'Unfortunately • it becomes dangerous',title:'A king without an invitation',text:'A frosting-powered chariot lands in the square. Its driver has misunderstood the assignment.',pan:[4,-1],beats:[
+    ['King Glazebald','At last! A festival worthy of King Glazebald the Magnificent!'],
+    ['Mayor Twistopher','Actually, it’s for Catherine.'],
+    ['King Glazebald','Who?'],
+    ['Mayor Twistopher','Catherine.'],
+    ['King Glazebald','I heard you. I was giving you an opportunity to correct yourself.',true]
+  ]},
+  {image:'story3',kicker:'The Great Sprinkle Raid',title:'Glazebald cancels the party',text:'If Twistwick will not celebrate him, Glazebald decides nobody gets a celebration.',pan:[-3,2],beats:[
+    ['King Glazebald','Take the Salt Crystals! Capture the townspeople! And fix that banner!'],
+    ['Mayor Twistopher','Would mustard settle this peacefully?'],
+    ['King Glazebald','I am offended by the question and the condiment.'],
+    ['Sir Sprinkles','Shall we arrest the mustard too, Your Glaziness?'],
+    ['King Glazebald','Especially the mustard.',true]
+  ]},
+  {image:'story4',kicker:'Meanwhile • Cat’s breakfast',title:'The extremely dramatic knock',text:'Three escapees find Catherine “Cat” Crumbwell and one rapidly cooling cup of coffee.',pan:[3,0],beats:[
+    ['Cat Crumbwell','If this is about the noise complaint, my toaster has legal representation.'],
+    ['Auntie Saltina','Glazebald captured everyone!'],
+    ['Cat Crumbwell','That sounds serious.'],
+    ['Little Loop','He also destroyed Catherine’s birthday decorations.'],
+    ['Cat Crumbwell','That sounds personal.',true]
+  ]},
+  {image:'story5',kicker:'One heroic sigh later',title:'The Cream Cheese Sling',text:'Auntie Saltina reveals Twistwick’s ancient weapon. Cat reluctantly begins looking heroic.',pan:[-2,-2],beats:[
+    ['Auntie Saltina','Twistwick needs a hero.'],
+    ['Cat Crumbwell','Twistwick needs better security.'],
+    ['Little Loop','Our report says Glazebald is loud, dramatic, and extremely spotty.'],
+    ['Cat Crumbwell','Spotty?'],
+    ['Little Loop','Sprinkles. Probably. It also says you may call him a dummy.'],
+    ['Cat Crumbwell','That is not intelligence. That is a prediction.'],
+    ['Cat Crumbwell','Fine. I’ll save the birthday and deal with the spotty dummy.',true],
+    ['King Glazebald','I HEARD THAT!',true]
+  ]}
 ];
 
 const LEVELS = [
@@ -31,7 +64,7 @@ const LEVELS = [
     hazards:[[820,455,70,85],[1620,455,70,85]],cages:[[1100,385,'Baker Braidley'],[1780,385,'Little Loop']],checkpoints:[1380,1980],enemies:[[720,400,'scout'],[1400,305,'archer'],[1940,400,'roller']],switches:[],boss:{x:2380,y:350,kind:'king',hp:6}}
 ];
 
-let scene='loading', storyIndex=0, levelIndex=0, level=null, last=0, camera=0, totalRescued=0, muted=false, audio=null, toastTimer=0, dialogueQueue=[], dialogueDone=null;
+let scene='loading', storyIndex=0, storyBeat=0, levelIndex=0, level=null, last=0, camera=0, totalRescued=0, muted=false, audio=null, toastTimer=0, dialogueQueue=[], dialogueDone=null;
 let platforms=[], hazards=[], cages=[], enemies=[], projectiles=[], particles=[], switches=[], checkpoint={x:90,y:360};
 const input={left:false,right:false,jump:false,shoot:false,jumpPress:false,shootPress:false};
 const hero={x:90,y:350,w:44,h:62,vx:0,vy:0,dir:1,onGround:false,coyote:0,jumpBuffer:0,hearts:3,cream:8,creamClock:0,shootCd:0,invuln:0,animation:'idle',frame:0,frameClock:0};
@@ -41,14 +74,32 @@ function show(el){el?.classList.remove('hidden')} function hide(el){el?.classLis
 function tone(freq=440,d=.08,type='sine'){if(muted)return;try{audio ||= new (window.AudioContext||window.webkitAudioContext)();const o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(.055,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+d);o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+d)}catch{}}
 function say(text,time=1800){ui.toast.textContent=text;ui.toast.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>ui.toast.classList.remove('show'),time)}
 function updateHud(){ui.hearts.textContent='♥ '.repeat(hero.hearts).trim()+' ♡ '.repeat(3-hero.hearts).trim();ui.cream.textContent=Math.floor(hero.cream);ui.rescued.textContent=totalRescued+'/5';if(!level)return;const boss=enemies.find(e=>!e.dead&&(e.kind==='sprinkles'||e.kind==='king'));ui.goalPill.textContent=!cages.every(c=>c.saved)?'FIND THE PRETZELS →':boss?'DEFEAT THE BOSS →':'REACH THE GATE →'}
-function storyStart(){scene='story';storyIndex=0;hideOverlays();show(ui.storyScreen);renderStory()}
-function renderStory(){const s=STORY[storyIndex];ui.storyImage.src=images[s.image].src;ui.storyImage.alt=s.title+' pixel-art scene';ui.storyKicker.textContent=s.kicker;ui.storyTitle.textContent=s.title;ui.storyText.textContent=s.text;ui.storyQuote.textContent=s.quote;ui.pageNumber.textContent=(storyIndex+1)+' / '+STORY.length;document.querySelector('#nextStory').innerHTML=storyIndex===STORY.length-1?'Begin the quest <b>→</b>':'Next <b>→</b>';drawBackdrop()}
-function nextStory(){tone(620,.08);if(++storyIndex>=STORY.length)return showLevelIntro(0);renderStory()}
+function storyStart(){scene='story';storyIndex=0;storyBeat=0;hideOverlays();show(ui.storyScreen);renderStory(true)}
+function renderStory(newScene=false){
+  const s=STORY[storyIndex],beat=s.beats[storyBeat],card=ui.storyScreen;
+  if(newScene){ui.storyImage.src=images[s.image].src;ui.storyImage.alt=s.title+' pixel-art scene';ui.storyKicker.textContent=s.kicker;ui.storyTitle.textContent=s.title;ui.storyText.textContent=s.text;card.style.setProperty('--scene-pan-x',s.pan[0]+'px');card.style.setProperty('--scene-pan-y',s.pan[1]+'px');card.classList.remove('scene-enter');void card.offsetWidth;card.classList.add('scene-enter')}
+  ui.storySpeaker.textContent=beat[0];ui.storyQuote.textContent=beat[1];drawPortrait(beat[0],ui.storyPortraitCanvas);
+  ui.pageNumber.textContent=`SCENE ${storyIndex+1} / ${STORY.length}`;
+  ui.storyBeatDots.innerHTML=s.beats.map((_,i)=>`<i class="${i<=storyBeat?'done':''}"></i>`).join('');
+  ui.storyDialogue.classList.remove('speaking');void ui.storyDialogue.offsetWidth;ui.storyDialogue.classList.add('speaking');
+  card.classList.toggle('story-react',Boolean(beat[2]));
+  const lastBeat=storyBeat===s.beats.length-1,lastScene=storyIndex===STORY.length-1;
+  document.querySelector('#nextStory').innerHTML=lastBeat?(lastScene?'Begin the quest <b>→</b>':'Turn the page <b>→</b>'):'Continue <b>→</b>';
+  drawBackdrop()
+}
+function nextStory(){
+  tone(620,.08);
+  const s=STORY[storyIndex];
+  if(storyBeat<s.beats.length-1){storyBeat++;return renderStory()}
+  storyIndex++;storyBeat=0;
+  if(storyIndex>=STORY.length)return showLevelIntro(0);
+  renderStory(true)
+}
 function showLevelIntro(i){levelIndex=i;scene='levelIntro';hideOverlays();hide(ui.hud);hide(ui.controls);const l=LEVELS[i];ui.levelKicker.textContent=l.act;ui.levelTitle.textContent=l.name;ui.levelDescription.textContent=l.desc;ui.levelMission.textContent=l.mission;ui.actLabel.textContent=l.act;ui.levelLabel.textContent=l.name;show(ui.levelScreen);drawBackdrop()}
 function loadLevel(i){levelIndex=i;level=LEVELS[i];scene='play';hideOverlays();show(ui.hud);show(ui.controls);hide(ui.bossHud);platforms=level.platforms.map(a=>({x:a[0],y:a[1],w:a[2],h:a[3],active:true}));hazards=level.hazards.map(a=>({x:a[0],y:a[1],w:a[2],h:a[3]}));cages=level.cages.map((a,n)=>({x:a[0],y:a[1],w:58,h:72,name:a[2],hp:1,saved:false,id:n}));switches=[];enemies=level.enemies.map((a,n)=>makeEnemy(a[0],a[1],a[2],n));if(level.boss)enemies.push(makeBoss(level.boss));projectiles=[];particles=[];checkpoint={...level.start};Object.assign(hero,{x:level.start.x,y:level.start.y,vx:0,vy:0,hearts:3,cream:8,invuln:0});camera=0;updateHud();queueDialogue(levelDialogue(i));}
-function levelDialogue(i){return i===0?[["Mayor Twistopher","🥨","Cat! One schmear hit opens a cage. We simplified the locks after several complaints."],["Cat Crumbwell","◎","Move, jump, shoot. Finally, instructions I can respect."]]:i===1?[["Cat Crumbwell","◎","A factory powered by sprinkles. Somehow this is still not the strangest Tuesday I've had."],["Sir Sprinkles","🍩","Trespasser! Prepare for a moderately challenging duel!"]]:[["Little Loop","🥨","Glazebald talks a lot, but ordinary cream cheese works perfectly."],["Cat Crumbwell","◎","Excellent. I brought eight scoops and very little patience."]]}
+function levelDialogue(i){return i===0?[["Cat Crumbwell","◎","Toast hills, jam pits, armed donuts. Nice quiet morning."],["Auntie Saltina","🥨","Find the cages! One schmear hit will break each lock."],["Cat Crumbwell","◎","Move, jump, shoot. Finally, instructions I respect."]]:i===1?[["Cat Crumbwell","◎","A factory powered by sprinkles. Somehow not the strangest Tuesday I’ve had."],["Auntie Saltina","🥨","Sir Sprinkles guards the far gate. He rehearses his entrances."],["Cat Crumbwell","◎","I’ll try to look surprised."]]:[["King Glazebald","🍩","Welcome to my impenetrable Glazed Gauntlet!"],["Cat Crumbwell","◎","I entered through an unlocked door."],["King Glazebald","🍩","A deliberately unlocked door! For dramatic tension!"]]}
 function makeEnemy(x,y,kind,n){return{x,y,w:kind==='roller'?54:50,h:kind==='roller'?54:58,kind,hp:kind==='roller'?2:1,maxHp:kind==='roller'?2:1,baseX:x,dir:n%2?1:-1,speed:kind==='roller'?62:34,cool:1.4+n*.2,dead:false,flash:0,animation:'walk',frame:0,frameClock:n*.07}}
-function makeBoss(b){return{x:b.x,y:b.y,w:b.kind==='king'?105:76,h:b.kind==='king'?105:82,kind:b.kind,hp:b.hp,maxHp:b.hp,baseX:b.x,dir:-1,speed:b.kind==='king'?85:60,cool:1.4,dead:false,flash:0,phase:1,state:'idle',stateClock:0,animation:'walk',frame:0,frameClock:0}}
+function makeBoss(b){return{x:b.x,y:b.y,w:b.kind==='king'?105:76,h:b.kind==='king'?105:82,kind:b.kind,hp:b.hp,maxHp:b.hp,baseX:b.x,dir:-1,speed:b.kind==='king'?85:60,cool:1.4,dead:false,flash:0,phase:1,state:'idle',stateClock:0,animation:'walk',frame:0,frameClock:0,introShown:false}}
 function queueDialogue(lines,done=null){dialogueQueue=[...lines];dialogueDone=done;scene='dialogue';show(ui.dialogue);advanceDialogue()}
 function advanceDialogue(){if(!dialogueQueue.length){hide(ui.dialogue);scene='play';const done=dialogueDone;dialogueDone=null;if(done)done();return}const [name,,text]=dialogueQueue.shift();document.querySelector('#speaker').textContent=name;drawPortrait(name);document.querySelector('#dialogueText').textContent=text;tone(360,.04,'triangle')}
 
@@ -85,19 +136,21 @@ function updateProjectiles(dt){for(const p of projectiles){p.x+=p.vx*dt;p.y+=p.v
     for(const c of cages)if(!c.saved&&overlap(p,c)&&p.owner==='hero'){p.life=0;c.hp--;burst(p.x,p.y,'#f3c84f',8);if(c.hp<=0)rescue(c)}
     for(const e of enemies)if(!e.dead&&overlap(p,e)&&p.owner==='hero'){p.life=0;hitEnemy(e,p)}
   }projectiles=projectiles.filter(p=>p.life>0&&p.x>-100&&p.x<level.width+100&&p.y<700)}
-function hitEnemy(e,p){if(e.kind==='king'){e.hp--;e.flash=.18;burst(p.x,p.y,'#f0a2c0',14);shake();tone(170,.08,'square');if(e.phase===1&&e.hp===3){e.phase=2;e.state='roll';queueDialogue([["King Glazebald","🍩","Impossible! Initiate rolling majestically!"],["Cat Crumbwell","◎","That is just rolling. Keep shooting, Catherine."]]);return}if(e.hp<=0)defeatBoss(e);updateHud();return}
-  e.hp--;e.flash=.15;burst(p.x,p.y,'#fff0c8',8);if(e.hp<=0){e.dead=true;updateHud();tone(160,.12,'sawtooth');if(e.kind==='sprinkles')queueDialogue([["Sir Sprinkles","🍩","I have been... lightly spread."],["Cat Crumbwell","◎","You fought bravely. Incorrectly, but bravely."]]);}}
-function defeatBoss(e){e.dead=true;hide(ui.bossHud);updateHud();for(let i=0;i<70;i++)burst(e.x+e.w/2,e.y+e.h/2,['#f4bb4f','#e75f7b','#8b72bd'][i%3],1);queueDialogue([["King Glazebald","🍩","You’ve struck my one obvious weakness!"],["Cat Crumbwell","◎","The enormous hole?"],["King Glazebald","🍩","…Yes."]]);tone(90,.4,'sawtooth')}
-function rescue(c){c.saved=true;totalRescued++;burst(c.x+29,c.y+35,'#f6cf55',22);tone(820,.15,'triangle');setTimeout(()=>tone(1040,.18,'triangle'),100);say(c.name+' rescued! Keep moving →');updateHud()}
-function finishLevel(){if(scene!=='play')return;if(levelIndex<LEVELS.length-1){scene='transition';document.querySelector('.game-card').classList.add('flash');setTimeout(()=>{document.querySelector('.game-card').classList.remove('flash');showLevelIntro(levelIndex+1)},400)}else{scene='endingStory';hide(ui.hud);hide(ui.controls);queueDialogue([["Mayor Twistopher","🥨","Cat Crumbwell, you rescued our people and saved Twistwick!"],["Cat Crumbwell","◎","And ruined a perfectly good helmet."],["Auntie Saltina","🥨","Please accept the highest honor our people can bestow."]],showEnding)}}
+function hitEnemy(e,p){if(e.kind==='king'){e.hp--;e.flash=.18;burst(p.x,p.y,'#f0a2c0',14);shake();tone(170,.08,'square');if(e.phase===1&&e.hp===3){e.phase=2;e.state='roll';queueDialogue([["King Glazebald","🍩","Impossible! Initiate rolling majestically!"],["Cat Crumbwell","◎","That’s just rolling."],["King Glazebald","🍩","Majestically!"]]);return}if(e.hp<=0)defeatBoss(e);updateHud();return}
+  e.hp--;e.flash=.15;burst(p.x,p.y,'#fff0c8',8);if(e.hp<=0){e.dead=true;updateHud();tone(160,.12,'sawtooth');if(e.kind==='sprinkles')queueDialogue([["Sir Sprinkles","🍩","I have been… lightly spread."],["Cat Crumbwell","◎","You fought bravely."],["Sir Sprinkles","🍩","Truly?"],["Cat Crumbwell","◎","No. But you looked like you needed that."]]);}}
+function defeatBoss(e){e.dead=true;hide(ui.bossHud);updateHud();for(let i=0;i<70;i++)burst(e.x+e.w/2,e.y+e.h/2,['#f4bb4f','#e75f7b','#8b72bd'][i%3],1);queueDialogue([["King Glazebald","🍩","Impossible! You discovered my one weakness!"],["Cat Crumbwell","◎","Cream cheese?"],["King Glazebald","🍩","No."],["Cat Crumbwell","◎","The enormous hole?"],["King Glazebald","🍩","…I preferred the first answer."]]);tone(90,.4,'sawtooth')}
+function rescueDialogue(name){return name==='Mayor Twistopher'?[["Mayor Twistopher","🥨","Cat! You came!"],["Cat Crumbwell","◎","Apparently I’m very predictable."],["Mayor Twistopher","🥨","Glazebald took the others to the Sprinkleworks."]]:name==='Knottingham'?[["Knottingham","🥨","Freedom! I was running out of cage-related conversation."],["Cat Crumbwell","◎","Go rehearse something less specific."]]:name==='Auntie Saltina'?[["Auntie Saltina","🥨","The Cream Cheese Sling suits you."],["Cat Crumbwell","◎","It clashes with the helmet, but I’ll survive."]]:name==='Baker Braidley'?[["Baker Braidley","🥨","The throne room is ahead. Also, he still hasn’t fixed the banner."],["Cat Crumbwell","◎","Some crimes cannot be forgiven."]]:[["Little Loop","🥨","Glazebald talks a lot. Ordinary cream cheese works perfectly."],["Cat Crumbwell","◎","Excellent. I brought eight scoops and very little patience."]]}
+function rescue(c){c.saved=true;totalRescued++;burst(c.x+29,c.y+35,'#f6cf55',22);tone(820,.15,'triangle');setTimeout(()=>tone(1040,.18,'triangle'),100);say(c.name+' rescued!');updateHud();queueDialogue(rescueDialogue(c.name))}
+function finishLevel(){if(scene!=='play')return;if(levelIndex<LEVELS.length-1){scene='transition';document.querySelector('.game-card').classList.add('flash');setTimeout(()=>{document.querySelector('.game-card').classList.remove('flash');showLevelIntro(levelIndex+1)},400)}else{scene='endingStory';hide(ui.hud);hide(ui.controls);queueDialogue([["Mayor Twistopher","🥨","Cat Crumbwell, you rescued our people and saved Catherine’s birthday!"],["Little Loop","🥨","And defeated a spotty dummy."],["King Glazebald","🍩","Stop calling me that!"],["Auntie Saltina","🥨","Please accept Twistwick’s highest honor: an Auntie Anne’s gift card."],["Cat Crumbwell","◎","You’re rewarding me for saving pretzels… with money to eat pretzels?"],["Mayor Twistopher","🥨","We did not think this through."],["Little Loop","🥨","Should we take it back?"],["Cat Crumbwell","◎","Absolutely not."]],showEnding)}}
 function showEnding(){scene='ending';hide(ui.dialogue);hide(ui.hud);hide(ui.controls);hide(ui.bossHud);show(ui.endingScreen);confetti(160);tone(523,.15);setTimeout(()=>tone(659,.15),160);setTimeout(()=>tone(784,.3),320)}
 function confetti(n){for(let i=0;i<n;i++)particles.push({x:Math.random()*W,y:-Math.random()*H,vx:(Math.random()-.5)*150,vy:70+Math.random()*160,life:6,color:['#ef6380','#f3bc4d','#75b89a','#9575bd'][i%4],r:3+Math.random()*5,screen:true})}
 
-function update(dt){if(scene==='play'){updateHero(dt);updateEnemies(dt);updateProjectiles(dt);const boss=enemies.find(e=>e.kind==='king'||e.kind==='sprinkles');if(boss&&Math.abs(hero.x-boss.x)<620){show(ui.bossHud);ui.bossName.textContent=boss.kind==='king'?'KING GLAZEBALD':'SIR SPRINKLES';ui.bossBar.style.width=Math.max(0,boss.hp/boss.maxHp*100)+'%'}else hide(ui.bossHud);camera+=(Math.max(0,Math.min(level.width-W,hero.x-W*.38))-camera)*Math.min(1,dt*5)}for(const p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=(p.screen?80:380)*dt;p.life-=dt}particles=particles.filter(p=>p.life>0);input.jumpPress=input.shootPress=false}
+function bossIntroduction(boss){boss.introShown=true;return boss.kind==='king'?[["King Glazebald","🍩","So. You’re the insolent bagel who called me a spotty dummy."],["Cat Crumbwell","◎","In my defense, you are spotty."],["King Glazebald","🍩","And the other part?"],["Cat Crumbwell","◎","The evidence is developing."]]:[["Sir Sprinkles","🍩","Halt! By royal order, you are officially surrounded!"],["Cat Crumbwell","◎","There’s nobody behind me."],["Sir Sprinkles","🍩","Unofficially surrounded."]]}
+function update(dt){if(scene==='play'){updateHero(dt);updateEnemies(dt);updateProjectiles(dt);if(scene==='play'){const boss=enemies.find(e=>e.kind==='king'||e.kind==='sprinkles');if(boss&&Math.abs(hero.x-boss.x)<620){show(ui.bossHud);ui.bossName.textContent=boss.kind==='king'?'KING GLAZEBALD':'SIR SPRINKLES';ui.bossBar.style.width=Math.max(0,boss.hp/boss.maxHp*100)+'%';if(!boss.introShown)queueDialogue(bossIntroduction(boss))}else hide(ui.bossHud);camera+=(Math.max(0,Math.min(level.width-W,hero.x-W*.38))-camera)*Math.min(1,dt*5)}}for(const p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=(p.screen?80:380)*dt;p.life-=dt}particles=particles.filter(p=>p.life>0);input.jumpPress=input.shootPress=false}
 
 function snap(v){return Math.round(v)}
 function drawSprite(key,x,y,w,h,flip=false,alpha=1,target=ctx){const box=SPRITE_FRAMES[key];if(!box||!images.sprites)return;target.save();target.imageSmoothingEnabled=false;target.globalAlpha=alpha;if(flip){target.translate(snap(x+w),snap(y));target.scale(-1,1);target.drawImage(images.sprites,...box,0,0,snap(w),snap(h))}else target.drawImage(images.sprites,...box,snap(x),snap(y),snap(w),snap(h));target.restore()}
-function drawPortrait(name){const p=ui.portraitCanvas.getContext('2d');p.clearRect(0,0,48,48);p.imageSmoothingEnabled=false;const key=name.includes('Glazebald')?'king.walk.0':name.includes('Sprinkles')?'sprinkles.walk.0':name.includes('Cat')?'cat.idle.0':'pretzel.happy.0';const box=SPRITE_FRAMES[key];const size=key.startsWith('king')?48:key.startsWith('pretzel')?38:44;p.drawImage(images.sprites,...box,(48-size)/2,(48-size)/2,size,size)}
+function drawPortrait(name,canvas=ui.portraitCanvas){const p=canvas.getContext('2d');p.clearRect(0,0,48,48);p.imageSmoothingEnabled=false;const key=name.includes('Glazebald')?'king.walk.0':name.includes('Sprinkles')?'sprinkles.walk.0':name.includes('Cat')?'cat.idle.0':'pretzel.happy.0';const box=SPRITE_FRAMES[key];const size=key.startsWith('king')?48:key.startsWith('pretzel')?38:44;p.drawImage(images.sprites,...box,(48-size)/2,(48-size)/2,size,size)}
 function drawBackdrop(){if(images.story5){ctx.drawImage(images.story5,0,0,W,H);ctx.fillStyle='#251a3277';ctx.fillRect(0,0,W,H)}else{ctx.fillStyle='#251a32';ctx.fillRect(0,0,W,H);for(let y=0;y<H;y+=24)for(let x=(y/24%2)*12;x<W;x+=24){ctx.fillStyle='#382646';ctx.fillRect(x,y,12,12)}}}
 function drawWorld(){const theme=level?.theme||'meadow',plate=theme==='factory'?images.factory:theme==='castle'?images.castle:images.commons,pan=Math.min(150,Math.max(0,camera*.105));ctx.drawImage(plate,-pan,0,W+150,H);ctx.fillStyle=theme==='castle'?'#21152b18':theme==='factory'?'#521f4012':'#fff0c208';ctx.fillRect(0,0,W,H);
   for(const p of platforms)drawPlatform(p,theme);for(const h of hazards)drawHazard(h);for(const c of cages)drawCage(c);drawExit();for(const e of enemies)drawEnemy(e);for(const p of projectiles)drawProjectile(p);if(hero.invuln<=0||Math.floor(performance.now()/80)%2)drawHero();for(const p of particles)drawParticle(p)}
@@ -117,7 +170,7 @@ function frame(t){const dt=Math.min(.034,(t-last)/1000||0);last=t;update(dt);dra
 function pressKey(k,down){if(down&&!input[k])input[k+'Press']=true;input[k]=down}
 document.querySelector('#startButton').addEventListener('click',()=>{tone(520,.08);storyStart()});document.querySelector('#continueButton').addEventListener('click',()=>showLevelIntro(0));document.querySelector('#skipStory').addEventListener('click',()=>showLevelIntro(0));document.querySelector('#nextStory').addEventListener('click',nextStory);document.querySelector('#levelButton').addEventListener('click',()=>loadLevel(levelIndex));document.querySelector('#dialogueNext').addEventListener('click',advanceDialogue);document.querySelector('#playAgain').addEventListener('click',()=>location.reload());document.querySelector('#muteButton').addEventListener('click',e=>{muted=!muted;e.currentTarget.textContent=muted?'×':'♪';say(muted?'Sound muted':'Sound on')});
 ui.retryLoad.addEventListener('click',loadAssets);
-const keyMap={ArrowLeft:'left',a:'left',A:'left',ArrowRight:'right',d:'right',D:'right',' ':'jump',ArrowUp:'jump',w:'jump',W:'jump',j:'shoot',J:'shoot'};addEventListener('keydown',e=>{const k=keyMap[e.key];if(k){e.preventDefault();pressKey(k,true)}if((scene==='dialogue')&&(e.key==='Enter'||e.key===' '))advanceDialogue()});addEventListener('keyup',e=>{const k=keyMap[e.key];if(k){e.preventDefault();pressKey(k,false)}});addEventListener('blur',()=>Object.keys(input).forEach(k=>input[k]=false));
+const keyMap={ArrowLeft:'left',a:'left',A:'left',ArrowRight:'right',d:'right',D:'right',' ':'jump',ArrowUp:'jump',w:'jump',W:'jump',j:'shoot',J:'shoot'};addEventListener('keydown',e=>{const k=keyMap[e.key];if(k){e.preventDefault();pressKey(k,true)}if(scene==='dialogue'&&(e.key==='Enter'||e.key===' '))advanceDialogue();else if(scene==='story'&&(e.key==='Enter'||e.key===' '))nextStory()});addEventListener('keyup',e=>{const k=keyMap[e.key];if(k){e.preventDefault();pressKey(k,false)}});addEventListener('blur',()=>Object.keys(input).forEach(k=>input[k]=false));
 
 function fetchImage(file){return new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(new Error(file));image.src=ASSET_ROOT+file})}
 async function loadAssets(){
