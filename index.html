@@ -4,21 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
   <meta name="theme-color" content="#24183f">
-  <meta name="description" content="Catherine and the Curse of King Glazebald — a birthday platformer by Sai.">
+  <meta name="description" content="Catherine and the Great Pretzel Rescue — a birthday platformer by Sai.">
   <link rel="icon" type="image/png" href="/cath/assets/pixel/favicon.png">
-  <title>Catherine and the Curse of King Glazebald</title>
+  <title>Catherine and the Great Pretzel Rescue</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/cath/styles.css?v=18">
+  <link rel="stylesheet" href="/cath/styles.css?v=19">
 </head>
 <body>
   <main class="shell">
     <section class="game-card" aria-label="Catherine's birthday platformer">
       <header class="topbar">
-        <div class="brand"><canvas class="brand-mark" id="brandPortrait" width="32" height="32" aria-hidden="true"></canvas><span>Cat’s Bagel Quest</span></div>
+        <div class="brand"><canvas class="brand-mark" id="brandPortrait" width="32" height="32" aria-hidden="true"></canvas><span>Cat’s Great Pretzel Rescue</span></div>
         <div class="stage-name"><small id="actLabel">THE STORY BEGINS</small><strong id="levelLabel">Twistwick</strong></div>
-        <button class="icon-button sound-button" id="muteButton" aria-label="Toggle sound" aria-pressed="false"><span>SFX</span><i aria-hidden="true"></i></button>
+        <button class="icon-button sound-button" id="muteButton" aria-label="Mute sound" aria-pressed="false">
+          <span class="speaker-icon" aria-hidden="true"><i></i><b></b></span>
+        </button>
       </header>
 
       <div class="viewport">
@@ -44,11 +46,11 @@
 
         <section class="title-card overlay hidden" id="titleScreen">
           <p class="eyebrow">A birthday adventure for Catherine</p>
-          <h1>Catherine <small>and the curse of</small><em>King Glazebald</em></h1>
+          <h1>Catherine <small>and the great</small><em>Pretzel Rescue</em></h1>
           <div class="title-cast" aria-label="Cat Crumbwell faces the Pretzel People and King Glazebald">
             <img class="title-cast-lineup" id="titleLineup" src="" alt="">
           </div>
-          <p>Catherine Crumbwell—known to everyone as Cat—is a curly-haired birthday hero with excellent hair and suspiciously bad timing.</p>
+          <p>Catherine Crumbwell—Cat to her friends—is Twistwick’s curly-haired hero, arriving just in time for trouble.</p>
           <button class="button primary" id="startButton">Open the storybook <b>→</b></button>
           <button class="text-button" id="continueButton">Skip story &amp; play</button>
         </section>
@@ -140,7 +142,8 @@
       <footer><span>Move: A D / ← →</span><i>•</i><span>Jump: Space</span><i>•</i><span>Throw: J</span></footer>
     </section>
   </main>
+  <audio id="backgroundMusic" loop preload="metadata"></audio>
   <script src="/cath/assets/pixel/sprite-frames.js?v=14"></script>
-  <script src="/cath/game.js?v=20"></script>
+  <script src="/cath/game.js?v=21"></script>
 </body>
 </html>

@@ -1,7 +1,9 @@
 /* Replace # with the real Auntie Anne's gift-card URL before sharing. */
 const GIFT_LINK = '#';
+const MUSIC_FILE = '/cath/assets/Cath.m4a';
 const canvas = document.querySelector('#game');
 const ctx = canvas.getContext('2d');
+const backgroundMusic = document.querySelector('#backgroundMusic');
 ctx.imageSmoothingEnabled = false;
 const W = 960, H = 540;
 
@@ -12,7 +14,7 @@ const images={};
 const ASSET_FILES={sprites:'sprites.png',tiles:'tiles.png',gates:'gates.png',commons:'background-commons-v3.png',factory:'background-sprinkleworks-v3.png',castle:'background-gauntlet-v3.png',story1:'story-1-happy.png',story2:'story-2.png',story3:'story-3-v2.png',story4:'story-4-v2.png',story5:'story-5-v2.png',victory:'story-6-v1.png',castLineup:'cast-lineup-v1.png',catPortrait:'portrait-cat-v1.png',kingPortrait:'portrait-king-v1.png',pretzelPortrait:'portrait-pretzel-v1.png'};
 
 const STORY = [
-  {image:'story1',kicker:'Twistwick • one peaceful morning',title:'A perfectly twisted birthday',text:'The Pretzel People prepare a surprise for their hero, Catherine Crumbwell, whom everyone calls Cat. Nothing is on fire yet.',pan:[-5,1],beats:[
+  {image:'story1',kicker:'Twistwick • one peaceful morning',title:'A perfectly twisted birthday',text:'Twistwick’s Pretzel People prepare a surprise celebration for their favorite bagel hero. Nothing is on fire yet.',pan:[-5,1],beats:[
     ['Mayor Twistopher','Citizens! Today’s celebration must be perfect.'],
     ['Little Loop','The birthday banner is upside down.'],
     ['Mayor Twistopher','Then it is perfectly upside down.'],
@@ -74,6 +76,14 @@ const hero={x:90,y:350,w:44,h:62,vx:0,vy:0,dir:1,onGround:false,coyote:0,jumpBuf
 
 function hideOverlays(){['titleScreen','storyScreen','levelScreen','tutorialScreen','victoryScreen','endingScreen'].forEach(k=>ui[k].classList.add('hidden'));}
 function show(el){el?.classList.remove('hidden')} function hide(el){el?.classList.add('hidden')}
+if(MUSIC_FILE){backgroundMusic.src=MUSIC_FILE;backgroundMusic.volume=.28}
+function unlockAudio(){
+  try{
+    audio ||= new (window.AudioContext||window.webkitAudioContext)();
+    if(audio.state==='suspended')audio.resume();
+    if(MUSIC_FILE&&!muted&&backgroundMusic.paused)backgroundMusic.play().catch(()=>{});
+  }catch{}
+}
 function tone(freq=440,d=.08,type='sine'){if(muted)return;try{audio ||= new (window.AudioContext||window.webkitAudioContext)();const o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(.055,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+d);o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+d)}catch{}}
 function say(text,time=1800){ui.toast.textContent=text;ui.toast.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>ui.toast.classList.remove('show'),time)}
 function updateHud(){[...ui.hearts.children].forEach((pip,i)=>pip.classList.toggle('empty',i>=hero.hearts));ui.cream.textContent=Math.floor(hero.cream);ui.rescued.textContent=totalRescued+'/5';if(!level)return;const boss=enemies.find(e=>!e.dead&&(e.kind==='sprinkles'||e.kind==='king'));ui.goalPill.textContent=!cages.every(c=>c.saved)?'FIND THE PRETZELS →':boss?'DEFEAT THE BOSS →':'REACH THE GATE →'}
@@ -195,7 +205,7 @@ function draw(){ctx.imageSmoothingEnabled=false;if(scene==='loading'||scene==='t
 function frame(t){const dt=Math.min(.034,(t-last)/1000||0);last=t;update(dt);draw();requestAnimationFrame(frame)}
 
 function pressKey(k,down){if(down&&!input[k])input[k+'Press']=true;input[k]=down}
-document.querySelector('#startButton').addEventListener('click',()=>{tone(520,.08);storyStart()});document.querySelector('#continueButton').addEventListener('click',()=>showLevelIntro(0));document.querySelector('#skipStory').addEventListener('click',()=>showLevelIntro(0));document.querySelector('#nextStory').addEventListener('click',nextStory);document.querySelector('#dialogueNext').addEventListener('click',advanceDialogue);document.querySelector('#playAgain').addEventListener('click',()=>location.reload());document.querySelector('#muteButton').addEventListener('click',e=>{muted=!muted;e.currentTarget.classList.toggle('muted',muted);e.currentTarget.setAttribute('aria-pressed',String(muted));say(muted?'Sound muted':'Sound on')});
+document.querySelector('#startButton').addEventListener('click',()=>{unlockAudio();tone(520,.08);storyStart()});document.querySelector('#continueButton').addEventListener('click',()=>{unlockAudio();showLevelIntro(0)});document.querySelector('#skipStory').addEventListener('click',()=>{unlockAudio();showLevelIntro(0)});document.querySelector('#nextStory').addEventListener('click',nextStory);document.querySelector('#dialogueNext').addEventListener('click',advanceDialogue);document.querySelector('#playAgain').addEventListener('click',()=>location.reload());document.querySelector('#muteButton').addEventListener('click',e=>{unlockAudio();muted=!muted;backgroundMusic.muted=muted;e.currentTarget.classList.toggle('muted',muted);e.currentTarget.setAttribute('aria-pressed',String(muted));e.currentTarget.setAttribute('aria-label',muted?'Unmute sound':'Mute sound');if(!muted&&MUSIC_FILE)backgroundMusic.play().catch(()=>{});say(muted?'Sound muted':'Sound on')});
 document.querySelector('#levelButton').addEventListener('click',beginLevel);
 document.querySelector('#tutorialButton').addEventListener('click',startTutorialLevel);
 document.querySelector('#victoryButton').addEventListener('click',()=>{hide(ui.victoryScreen);showEnding()});
