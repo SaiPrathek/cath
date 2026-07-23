@@ -18,6 +18,8 @@ The generated concepts were downsampled to 320×180 with nearest-neighbor resamp
 
 Versioned `story-3-v2.png`, `story-4-v2.png`, and `story-5-v2.png` implement the corrected prison staging and Cat's curly-haired design. Story panels are displayed in full with `object-fit: contain` rather than cropped.
 
+`story-6-v1.png` is the illustrated victory panel. It uses scenes 3 and 5 as visual references and shows curly-haired Cat standing triumphant with her sling and buckler, Glazebald comically defeated beside his fallen crown, and the rescued Pretzel People cheering in the raspberry fortress at sunrise.
+
 ## Gameplay environments — second art pass
 
 Each level received a dedicated 16:9 background plate in the same Roman-bakery pixel style, with three visual depth layers, dark plum outlines, selective dithering, dense material detail, no characters, no HUD, and a readable lower playfield.
