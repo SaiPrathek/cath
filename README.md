@@ -6,7 +6,7 @@ A bright Roman-bakery pixel-art birthday platformer for Catherine, published at 
 
 - Move: `A` / `D` or arrow keys
 - Jump or dodge: `Space`
-- Throw cream cheese: `J`
+- Throw eggs: `J`
 
 Rescue the five Pretzel People, defeat the Donut Legion, and reach each themed exit gate.
 
