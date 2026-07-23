@@ -9,7 +9,7 @@ const ui = Object.fromEntries(['loadingScreen','loadingStatus','retryLoad','titl
 document.querySelector('#giftLink').href = GIFT_LINK;
 const ASSET_ROOT='/cath/assets/pixel/';
 const images={};
-const ASSET_FILES={sprites:'sprites.png',tiles:'tiles.png',commons:'background-commons-v3.png',factory:'background-sprinkleworks-v3.png',castle:'background-gauntlet-v3.png',story1:'story-1.png',story2:'story-2.png',story3:'story-3.png',story4:'story-4.png',story5:'story-5.png'};
+const ASSET_FILES={sprites:'sprites.png',tiles:'tiles.png',commons:'background-commons-v3.png',factory:'background-sprinkleworks-v3.png',castle:'background-gauntlet-v3.png',story1:'story-1-happy.png',story2:'story-2.png',story3:'story-3.png',story4:'story-4.png',story5:'story-5.png'};
 
 const STORY = [
   {image:'story1',kicker:'Twistwick • one peaceful morning',title:'A perfectly twisted birthday',text:'The Pretzel People prepare a surprise for their hero, Catherine Crumbwell, whom everyone calls Cat. Nothing is on fire yet.',pan:[-5,1],beats:[

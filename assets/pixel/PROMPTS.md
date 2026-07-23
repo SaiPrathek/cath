@@ -8,7 +8,7 @@ Create a cohesive character lineup for a 2D platformer: Cat Crumbwell, a heroic 
 
 ## Story scenes
 
-1. **Festival in Twistwick:** A bright morning wide shot of Pretzel Town. Pretzel citizens decorate for a birthday, Mayor Twistopher directs from a crate, and two citizens argue over an upside-down blank banner.
+1. **Festival in Twistwick:** A bright morning wide shot of Pretzel Town. Every pretzel citizen is visibly happy, smiling, waving, or enthusiastically decorating for the birthday; Mayor Twistopher directs from a crate while two cheerful citizens arrange the blank banner.
 2. **Glazebald’s Invasion:** King Glazebald arrives in a frosting-powered chariot with Roman donut legionaries, frightened pretzels, dramatic raspberry clouds, and airborne sprinkles.
 3. **The Great Pretzel Capture:** Pretzels are held in candy-bar cages while donut guards steal glowing Golden Salt Crystals; Mayor Twistopher offers mustard to an offended Glazebald in dramatic but playful raspberry light.
 4. **A Knock at Cat’s Door:** Cat answers her bakery-cottage door in pajamas with coffee. Three desperate pretzels wait outside, while her helmet, buckler, and Cream Cheese Sling hang visibly behind her.

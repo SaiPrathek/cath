@@ -10,13 +10,16 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("source", type=Path)
     parser.add_argument("output", type=Path)
+    parser.add_argument("--width", type=int, default=960)
+    parser.add_argument("--height", type=int, default=540)
+    parser.add_argument("--colors", type=int, default=128)
     args = parser.parse_args()
 
     image = Image.open(args.source).convert("RGB")
-    image = ImageOps.fit(image, (960, 540), method=Image.Resampling.NEAREST)
+    image = ImageOps.fit(image, (args.width, args.height), method=Image.Resampling.NEAREST)
     image = ImageEnhance.Contrast(image).enhance(1.08)
     image = ImageEnhance.Color(image).enhance(0.92)
-    image = image.quantize(colors=128, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
+    image = image.quantize(colors=args.colors, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     image.save(args.output, optimize=True)
 
