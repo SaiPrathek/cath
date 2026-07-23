@@ -12,7 +12,7 @@ const images={};
 const ASSET_FILES={sprites:'sprites.png',tiles:'tiles.png',commons:'background-commons-v3.png',factory:'background-sprinkleworks-v3.png',castle:'background-gauntlet-v3.png',story1:'story-1.png',story2:'story-2.png',story3:'story-3.png',story4:'story-4.png',story5:'story-5.png'};
 
 const STORY = [
-  {image:'story1',kicker:'Twistwick • one peaceful morning',title:'A perfectly twisted birthday',text:'The Pretzel People prepare a surprise for Catherine—better known around town as Cat Crumbwell. Nothing is on fire yet.',pan:[-5,1],beats:[
+  {image:'story1',kicker:'Twistwick • one peaceful morning',title:'A perfectly twisted birthday',text:'The Pretzel People prepare a surprise for their hero, Catherine Crumbwell, whom everyone calls Cat. Nothing is on fire yet.',pan:[-5,1],beats:[
     ['Mayor Twistopher','Citizens! Today’s celebration must be perfect.'],
     ['Little Loop','The birthday banner is upside down.'],
     ['Mayor Twistopher','Then it is perfectly upside down.'],
@@ -21,9 +21,9 @@ const STORY = [
   ]},
   {image:'story2',kicker:'Unfortunately • it becomes dangerous',title:'A king without an invitation',text:'A frosting-powered chariot lands in the square. Its driver has misunderstood the assignment.',pan:[4,-1],beats:[
     ['King Glazebald','At last! A festival worthy of King Glazebald the Magnificent!'],
-    ['Mayor Twistopher','Actually, it’s for Catherine. Cat Crumbwell.'],
+    ['Mayor Twistopher','Actually, it’s for Cat Crumbwell.'],
     ['King Glazebald','Who?'],
-    ['Mayor Twistopher','Cat. Our birthday girl. Hero helmet, red cape, terrible morning mood.'],
+    ['Mayor Twistopher','Twistwick’s bagel hero—and today’s birthday girl.'],
     ['King Glazebald','I heard you. I was giving you an opportunity to correct yourself.',true]
   ]},
   {image:'story3',kicker:'The Great Sprinkle Raid',title:'Glazebald cancels the party',text:'If Twistwick will not celebrate him, Glazebald decides nobody gets a celebration.',pan:[-3,2],beats:[
@@ -33,7 +33,7 @@ const STORY = [
     ['Sir Sprinkles','Shall we arrest the mustard too, Your Glaziness?'],
     ['King Glazebald','Especially the mustard.',true]
   ]},
-  {image:'story4',kicker:'Meanwhile • Cat’s breakfast',title:'The extremely dramatic knock',text:'Three escapees find the birthday girl herself: Catherine “Cat” Crumbwell—and one rapidly cooling cup of coffee.',pan:[3,0],beats:[
+  {image:'story4',kicker:'Meanwhile • Cat’s breakfast',title:'The extremely dramatic knock',text:'Three escapees find Cat Crumbwell, the birthday girl herself—and one rapidly cooling cup of coffee.',pan:[3,0],beats:[
     ['Cat Crumbwell','If this is about the noise complaint, my toaster has legal representation.'],
     ['Auntie Saltina','Glazebald captured everyone!'],
     ['Cat Crumbwell','That sounds serious.'],
@@ -141,7 +141,7 @@ function hitEnemy(e,p){if(e.kind==='king'){e.hp--;e.flash=.18;burst(p.x,p.y,'#f0
 function defeatBoss(e){e.dead=true;hide(ui.bossHud);updateHud();for(let i=0;i<70;i++)burst(e.x+e.w/2,e.y+e.h/2,['#f4bb4f','#e75f7b','#8b72bd'][i%3],1);queueDialogue([["King Glazebald","🍩","Impossible! You discovered my one weakness!"],["Cat Crumbwell","◎","Cream cheese?"],["King Glazebald","🍩","No."],["Cat Crumbwell","◎","The enormous hole?"],["King Glazebald","🍩","…I preferred the first answer."]]);tone(90,.4,'sawtooth')}
 function rescueDialogue(name){return name==='Mayor Twistopher'?[["Mayor Twistopher","🥨","Cat! You came!"],["Cat Crumbwell","◎","Apparently I’m very predictable."],["Mayor Twistopher","🥨","Glazebald took the others to the Sprinkleworks."]]:name==='Knottingham'?[["Knottingham","🥨","Freedom! I was running out of cage-related conversation."],["Cat Crumbwell","◎","Go rehearse something less specific."]]:name==='Auntie Saltina'?[["Auntie Saltina","🥨","The Cream Cheese Sling suits you."],["Cat Crumbwell","◎","It clashes with the helmet, but I’ll survive."]]:name==='Baker Braidley'?[["Baker Braidley","🥨","The throne room is ahead. Also, he still hasn’t fixed the banner."],["Cat Crumbwell","◎","Some crimes cannot be forgiven."]]:[["Little Loop","🥨","Glazebald talks a lot. Ordinary cream cheese works perfectly."],["Cat Crumbwell","◎","Excellent. I brought eight scoops and very little patience."]]}
 function rescue(c){c.saved=true;totalRescued++;burst(c.x+29,c.y+35,'#f6cf55',22);tone(820,.15,'triangle');setTimeout(()=>tone(1040,.18,'triangle'),100);say(c.name+' rescued!');updateHud();queueDialogue(rescueDialogue(c.name))}
-function finishLevel(){if(scene!=='play')return;if(levelIndex<LEVELS.length-1){scene='transition';document.querySelector('.game-card').classList.add('flash');setTimeout(()=>{document.querySelector('.game-card').classList.remove('flash');showLevelIntro(levelIndex+1)},400)}else{scene='endingStory';hide(ui.hud);hide(ui.controls);queueDialogue([["Mayor Twistopher","🥨","Cat Crumbwell, you rescued our people and saved your own birthday!"],["Cat Crumbwell","◎","Just to be clear: Catherine is my full name. Cat is what everyone calls me."],["Little Loop","🥨","And Cat defeated a spotty dummy."],["King Glazebald","🍩","Stop calling me that!"],["Auntie Saltina","🥨","Please accept Twistwick’s highest honor: an Auntie Anne’s gift card."],["Cat Crumbwell","◎","You’re rewarding me for saving pretzels… with money to eat pretzels?"],["Mayor Twistopher","🥨","We did not think this through."],["Little Loop","🥨","Should we take it back?"],["Cat Crumbwell","◎","Absolutely not."]],showEnding)}}
+function finishLevel(){if(scene!=='play')return;if(levelIndex<LEVELS.length-1){scene='transition';document.querySelector('.game-card').classList.add('flash');setTimeout(()=>{document.querySelector('.game-card').classList.remove('flash');showLevelIntro(levelIndex+1)},400)}else{scene='endingStory';hide(ui.hud);hide(ui.controls);queueDialogue([["Mayor Twistopher","🥨","Cat Crumbwell, you rescued our people and saved your birthday celebration!"],["Little Loop","🥨","And defeated a spotty dummy."],["King Glazebald","🍩","Stop calling me that!"],["Auntie Saltina","🥨","Please accept Twistwick’s highest honor: an Auntie Anne’s gift card."],["Cat Crumbwell","◎","You’re rewarding me for saving pretzels… with money to eat pretzels?"],["Mayor Twistopher","🥨","We did not think this through."],["Little Loop","🥨","Should we take it back?"],["Cat Crumbwell","◎","Absolutely not."]],showEnding)}}
 function showEnding(){scene='ending';hide(ui.dialogue);hide(ui.hud);hide(ui.controls);hide(ui.bossHud);show(ui.endingScreen);confetti(160);tone(523,.15);setTimeout(()=>tone(659,.15),160);setTimeout(()=>tone(784,.3),320)}
 function confetti(n){for(let i=0;i<n;i++)particles.push({x:Math.random()*W,y:-Math.random()*H,vx:(Math.random()-.5)*150,vy:70+Math.random()*160,life:6,color:['#ef6380','#f3bc4d','#75b89a','#9575bd'][i%4],r:3+Math.random()*5,screen:true})}
 
