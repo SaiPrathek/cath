@@ -19,6 +19,10 @@ PINK = "#dc557f"
 PURPLE = "#8d4ca0"
 BROWN = "#94512e"
 BROWN_HI = "#d18a42"
+HAIR = "#573021"
+HAIR_HI = "#7a432b"
+MINT = "#70a873"
+BLUE = "#4d82a8"
 
 
 def story_assets():
@@ -57,6 +61,10 @@ def cat_frame(frame, state):
     px(d, (22, y+9, 24, y+11), GOLD_HI)
     for sx, sy in ((14, 8), (19, 7), (9, 17), (23, 17)):
         px(d, (sx, y+sy, sx+1, y+sy), CREAM)
+    # Catherine's dark-brown curls remain visible beneath the helmet.
+    for cx, cy in ((8, 11), (7, 15), (8, 19), (24, 11), (25, 15), (24, 19)):
+        d.ellipse((cx-2, y+cy-2, cx+2, y+cy+2), fill=HAIR, outline=INK)
+        px(d, (cx-1, y+cy-1, cx, y+cy), HAIR_HI)
     # helmet + plume
     px(d, (6, y+3, 25, y+9), SILVER, INK)
     px(d, (9, y+1, 22, y+4), SILVER_HI, INK)
@@ -134,10 +142,10 @@ def donut_frame(kind, frame):
     return im
 
 
-def pretzel_frame(frame, happy=False):
+def pretzel_frame(frame, happy=False, accessory=None, state="idle"):
     im = Image.new("RGBA", (24, 24), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
-    y = frame % 2
+    y = frame % 2 if state in ("idle", "follow") else (0, -1, -2, -1)[frame % 4]
     # chunky pretzel loop
     d.line([(4, 7+y), (2, 11+y), (4, 16+y), (8, 17+y), (12, 12+y), (16, 17+y), (20, 16+y), (22, 11+y), (20, 7+y), (17, 5+y), (12, 10+y), (7, 5+y), (4, 7+y)], fill=INK, width=5, joint="curve")
     d.line([(4, 7+y), (2, 11+y), (4, 16+y), (8, 17+y), (12, 12+y), (16, 17+y), (20, 16+y), (22, 11+y), (20, 7+y), (17, 5+y), (12, 10+y), (7, 5+y), (4, 7+y)], fill=BROWN_HI, width=3, joint="curve")
@@ -149,11 +157,88 @@ def pretzel_frame(frame, happy=False):
         px(d, (10, 16+y, 14, 17+y), CREAM)
     else:
         px(d, (10, 16+y, 14, 17+y), INK)
+    if state == "follow":
+        foot = -1 if frame % 2 else 1
+        px(d, (5+foot, 19+y, 8+foot, 21+y), BROWN_HI, INK)
+        px(d, (16-foot, 19+y, 19-foot, 21+y), BROWN_HI, INK)
+    if state == "cheer":
+        px(d, (0, 8+y, 4, 10+y), BROWN_HI, INK)
+        px(d, (20, 8+y, 23, 10+y), BROWN_HI, INK)
+    if accessory == "mayor":
+        px(d, (4, 4+y, 19, 5+y), GOLD_HI, INK)
+        px(d, (7, 6+y, 16, 7+y), RED, INK)
+    elif accessory == "knottingham":
+        px(d, (7, 3+y, 17, 5+y), MINT, INK)
+        px(d, (12, 17+y, 15, 20+y), BLUE, INK)
+    elif accessory == "saltina":
+        px(d, (6, 8+y, 10, 12+y), SILVER_HI, INK)
+        px(d, (15, 8+y, 19, 12+y), SILVER_HI, INK)
+        px(d, (10, 10+y, 15, 11+y), SILVER_DARK)
+        px(d, (8, 3+y, 17, 5+y), PINK, INK)
+    elif accessory == "braidley":
+        px(d, (7, 1+y, 17, 5+y), CREAM, INK)
+        px(d, (5, 4+y, 19, 7+y), CREAM, INK)
+    elif accessory == "little":
+        px(d, (7, 16+y, 18, 18+y), BLUE, INK)
+        px(d, (16, 18+y, 20, 21+y), BLUE, INK)
+    return im
+
+
+def gate_frame(theme, opened):
+    im = Image.new("RGBA", (96, 128), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    if theme == "meadow":
+        stone, trim, door, accent = "#d4a35b", CREAM, MINT, GOLD_HI
+        px(d, (6, 24, 89, 119), stone, INK, 3)
+        px(d, (14, 12, 81, 31), trim, INK, 3)
+        px(d, (22, 30, 73, 119), INK, INK)
+        if not opened:
+            for x in range(27, 72, 11):
+                px(d, (x, 35, x+6, 119), door, INK)
+            px(d, (24, 72, 72, 82), accent, INK)
+        else:
+            px(d, (24, 36, 31, 118), door, INK)
+            px(d, (65, 36, 72, 118), door, INK)
+        d.ellipse((39, 16, 57, 34), fill=accent, outline=INK, width=2)
+        d.ellipse((45, 22, 51, 28), fill=INK)
+    elif theme == "factory":
+        brass, dark, berry, cream = "#c48a3d", "#55354f", "#a94769", CREAM
+        px(d, (5, 18, 90, 120), dark, INK, 3)
+        px(d, (12, 25, 83, 116), brass, INK, 3)
+        px(d, (19, 33, 76, 116), INK, INK)
+        for y in range(38, 114, 18):
+            px(d, (19, y, 76, y+7), berry, INK)
+        if opened:
+            px(d, (19, 48, 27, 116), brass, INK)
+            px(d, (68, 48, 76, 116), brass, INK)
+            px(d, (28, 48, 67, 56), cream, INK)
+        else:
+            for x in range(24, 76, 13):
+                px(d, (x, 34, x+6, 116), cream, INK)
+        for cx, cy in ((14, 22), (82, 22)):
+            d.ellipse((cx-9, cy-9, cx+9, cy+9), fill=brass, outline=INK, width=2)
+            px(d, (cx-2, cy-2, cx+2, cy+2), dark)
+    else:
+        cookie, iron, glaze, gold = "#4a385b", "#21152b", "#b94d78", GOLD_HI
+        px(d, (4, 17, 91, 121), cookie, INK, 3)
+        px(d, (12, 28, 83, 118), iron, INK, 3)
+        px(d, (18, 35, 77, 116), glaze, INK, 2)
+        if opened:
+            px(d, (18, 35, 26, 116), gold, INK)
+            px(d, (69, 35, 77, 116), gold, INK)
+            px(d, (27, 35, 68, 44), iron, INK)
+        else:
+            for x in range(22, 78, 12):
+                px(d, (x, 35, x+6, 116), iron, INK)
+            for y in (54, 82):
+                px(d, (18, y, 77, y+6), gold, INK)
+        d.polygon([(32, 28), (48, 9), (64, 28)], fill=gold, outline=INK)
+        d.ellipse((41, 17, 55, 31), fill=glaze, outline=INK, width=2)
     return im
 
 
 def build_atlas():
-    atlas = Image.new("RGBA", (768, 192), (0, 0, 0, 0))
+    atlas = Image.new("RGBA", (768, 352), (0, 0, 0, 0))
     manifest = {}
     x = 0
     rows = {"cat": 0, "enemy": 48, "boss": 96, "object": 144}
@@ -186,6 +271,24 @@ def build_atlas():
         for f in range(4):
             add(f"pretzel.{'happy' if happy else 'worried'}.{f}", pretzel_frame(f, happy), rows["object"])
 
+    followers = [
+        ("mayor", "mayor"),
+        ("knottingham", "knottingham"),
+        ("saltina", "saltina"),
+        ("braidley", "braidley"),
+        ("little", "little"),
+    ]
+    for n, (key, accessory) in enumerate(followers):
+        x = 0
+        row = 176 + n * 32
+        for state in ("follow", "cheer", "worried"):
+            for f in range(4):
+                add(
+                    f"pretzel.{key}.{state}.{f}",
+                    pretzel_frame(f, state != "worried", accessory, state),
+                    row,
+                )
+
     atlas.save(ASSETS / "sprites.png", optimize=True)
     atlas.crop((0, 0, 32, 32)).save(ASSETS / "favicon.png", optimize=True)
     lines = ["// Generated by scripts/build-pixel-assets.py", "const SPRITE_FRAMES = {"]
@@ -216,9 +319,18 @@ def build_tiles():
     out.save(ASSETS / "tiles.png", optimize=True)
 
 
+def build_gates():
+    out = Image.new("RGBA", (576, 128), (0, 0, 0, 0))
+    for n, theme in enumerate(("meadow", "factory", "castle")):
+        out.alpha_composite(gate_frame(theme, False), (n * 192, 0))
+        out.alpha_composite(gate_frame(theme, True), (n * 192 + 96, 0))
+    out.save(ASSETS / "gates.png", optimize=True)
+
+
 if __name__ == "__main__":
     ASSETS.mkdir(parents=True, exist_ok=True)
     story_assets()
     build_atlas()
     build_tiles()
-    print("Built story panels, sprite atlas, frame manifest, and tiles.")
+    build_gates()
+    print("Built story panels, sprite atlas, frame manifest, tiles, and themed gates.")
