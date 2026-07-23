@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/cath/styles.css?v=20">
+  <link rel="stylesheet" href="/cath/styles.css?v=21">
 </head>
 <body>
   <main class="shell">
@@ -72,6 +72,7 @@
             <div class="beat-dots" id="storyBeatDots" aria-label="Scene dialogue progress"></div>
           </div>
           <div class="story-actions">
+            <button class="text-button" id="previousStory">← Back</button>
             <button class="text-button" id="skipStory">Skip story</button>
             <button class="button primary" id="nextStory">Continue <b>→</b></button>
           </div>
@@ -82,7 +83,10 @@
           <h2 id="levelTitle">Crumbly Commons</h2>
           <p id="levelDescription"></p>
           <div class="mission" id="levelMission"></div>
-          <button class="button primary" id="levelButton">Enter the level <b>→</b></button>
+          <div class="card-actions">
+            <button class="text-button" id="levelBack">← Back to story</button>
+            <button class="button primary" id="levelButton">Enter the level <b>→</b></button>
+          </div>
         </section>
 
         <section class="tutorial-card overlay hidden" id="tutorialScreen" aria-labelledby="tutorialTitle">
@@ -96,14 +100,21 @@
           </div>
           <p>Break every cage, avoid touching the Donut Legion, then lead the rescued pretzels to the gate.</p>
           <div class="tutorial-note">Only Emperor Prathek shoots back.</div>
-          <button class="button primary" id="tutorialButton">Got it — start <b>→</b></button>
+          <div class="card-actions">
+            <button class="text-button" id="tutorialBack">← Back</button>
+            <button class="button primary" id="tutorialButton">Got it — start <b>→</b></button>
+          </div>
         </section>
 
         <section class="dialogue hidden" id="dialogue" aria-live="polite">
           <div class="portrait" id="portrait"><canvas id="portraitCanvas" width="48" height="48" aria-hidden="true"></canvas></div>
           <div><strong id="speaker">Cat Crumbwell</strong><p id="dialogueText"></p></div>
-          <button id="dialogueNext" aria-label="Continue dialogue">›</button>
+          <div class="dialogue-nav">
+            <button id="dialogueBack" aria-label="Previous dialogue">‹</button>
+            <button id="dialogueNext" aria-label="Continue dialogue">›</button>
+          </div>
         </section>
+        <button class="dialogue-review hidden" id="dialogueReview">↶ Review dialogue</button>
 
         <section class="victory-card overlay hidden" id="victoryScreen">
           <div class="victory-art">
@@ -144,6 +155,6 @@
   </main>
   <audio id="backgroundMusic" loop preload="metadata"></audio>
   <script src="/cath/assets/pixel/sprite-frames.js?v=15"></script>
-  <script src="/cath/game.js?v=26"></script>
+  <script src="/cath/game.js?v=27"></script>
 </body>
 </html>

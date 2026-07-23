@@ -7,7 +7,7 @@ const backgroundMusic = document.querySelector('#backgroundMusic');
 ctx.imageSmoothingEnabled = false;
 const W = 960, H = 540;
 
-const ui = Object.fromEntries(['loadingScreen','loadingStatus','retryLoad','titleScreen','storyScreen','storyImage','storyDialogue','storySpeaker','storyBeatDots','storyPortraitCanvas','levelScreen','tutorialScreen','victoryScreen','victoryImage','endingScreen','hud','controls','dialogue','toast','bossHud','actLabel','levelLabel','hearts','cream','rescued','goalPill','bossName','bossBar','storyKicker','storyTitle','storyText','storyQuote','pageNumber','levelKicker','levelTitle','levelDescription','levelMission','portraitCanvas','brandPortrait','titleLineup','hudPretzel','giftPretzel'].map(id=>[id,document.querySelector('#'+id)]));
+const ui = Object.fromEntries(['loadingScreen','loadingStatus','retryLoad','titleScreen','storyScreen','storyImage','storyDialogue','storySpeaker','storyBeatDots','storyPortraitCanvas','levelScreen','tutorialScreen','victoryScreen','victoryImage','endingScreen','hud','controls','dialogue','dialogueReview','toast','bossHud','actLabel','levelLabel','hearts','cream','rescued','goalPill','bossName','bossBar','storyKicker','storyTitle','storyText','storyQuote','pageNumber','levelKicker','levelTitle','levelDescription','levelMission','portraitCanvas','brandPortrait','titleLineup','hudPretzel','giftPretzel'].map(id=>[id,document.querySelector('#'+id)]));
 document.querySelector('#giftLink').href = GIFT_LINK;
 const ASSET_ROOT='/cath/assets/pixel/';
 const images={};
@@ -68,7 +68,7 @@ const LEVELS = [
     hazards:[],cages:[[1100,385,'Baker Braidley'],[1780,385,'Little Loop']],checkpoints:[1380,1980],enemies:[[720,400,'scout'],[1400,400,'archer'],[1940,400,'roller']],switches:[],boss:{x:2380,y:350,kind:'prathek',hp:6}}
 ];
 
-let scene='loading', storyIndex=0, storyBeat=0, levelIndex=0, level=null, last=0, camera=0, totalRescued=0, muted=false, audio=null, toastTimer=0, dialogueQueue=[], dialogueDone=null, tutorialShown=false;
+let scene='loading', storyIndex=0, storyBeat=0, levelIndex=0, level=null, last=0, camera=0, totalRescued=0, muted=false, audio=null, toastTimer=0, dialogueLines=[], dialogueIndex=-1, dialogueDone=null, tutorialShown=false;
 let platforms=[], hazards=[], cages=[], enemies=[], projectiles=[], particles=[], switches=[], checkpoint={x:90,y:360};
 const input={left:false,right:false,jump:false,shoot:false,jumpPress:false,shootPress:false};
 const hero={x:90,y:350,w:44,h:62,vx:0,vy:0,dir:1,onGround:false,coyote:0,jumpBuffer:0,hearts:3,cream:8,creamClock:0,shootCd:0,invuln:0,animation:'idle',frame:0,frameClock:0};
@@ -99,23 +99,49 @@ function renderStory(newScene=false){
   document.querySelector('#nextStory').innerHTML=lastBeat?(lastScene?'Begin the quest <b>→</b>':'Turn the page <b>→</b>'):'Continue <b>→</b>';
   drawBackdrop()
 }
+function previousStory(){
+  if(storyBeat>0)storyBeat--;
+  else if(storyIndex>0){storyIndex--;storyBeat=STORY[storyIndex].beats.length-1}
+  else{scene='title';hideOverlays();show(ui.titleScreen);return}
+  renderStory(true)
+}
+function returnToStory(){
+  scene='story';hideOverlays();hide(ui.hud);hide(ui.dialogue);hide(ui.dialogueReview);
+  ui.actLabel.textContent='THE STORY BEGINS';ui.levelLabel.textContent='Twistwick';
+  storyIndex=Math.max(0,Math.min(STORY.length-1,storyIndex));storyBeat=Math.max(0,Math.min(STORY[storyIndex].beats.length-1,storyBeat));
+  show(ui.storyScreen);renderStory(true)
+}
 function nextStory(){
   tone(620,.08);
   const s=STORY[storyIndex];
   if(storyBeat<s.beats.length-1){storyBeat++;return renderStory()}
+  if(storyIndex===STORY.length-1)return showLevelIntro(0);
   storyIndex++;storyBeat=0;
-  if(storyIndex>=STORY.length)return showLevelIntro(0);
   renderStory(true)
 }
-function showLevelIntro(i){levelIndex=i;scene='levelIntro';hideOverlays();hide(ui.hud);hide(ui.controls);const l=LEVELS[i];ui.levelKicker.textContent=l.act;ui.levelTitle.textContent=l.name;ui.levelDescription.textContent=l.desc;ui.levelMission.textContent=l.mission;ui.actLabel.textContent=l.act;ui.levelLabel.textContent=l.name;show(ui.levelScreen);drawBackdrop()}
+function showLevelIntro(i){levelIndex=i;scene='levelIntro';hideOverlays();hide(ui.hud);hide(ui.controls);hide(ui.dialogueReview);const l=LEVELS[i];ui.levelKicker.textContent=l.act;ui.levelTitle.textContent=l.name;ui.levelDescription.textContent=l.desc;ui.levelMission.textContent=l.mission;ui.actLabel.textContent=l.act;ui.levelLabel.textContent=l.name;document.querySelector('#levelBack').classList.toggle('hidden',i!==0);show(ui.levelScreen);drawBackdrop()}
 function beginLevel(){if(levelIndex===0&&!tutorialShown){tutorialShown=true;scene='tutorial';hideOverlays();hide(ui.hud);hide(ui.controls);show(ui.tutorialScreen);drawBackdrop();return}loadLevel(levelIndex)}
 function startTutorialLevel(){if(scene!=='tutorial')return;loadLevel(0)}
+function backFromTutorial(){tutorialShown=false;showLevelIntro(0)}
 function loadLevel(i){levelIndex=i;level=LEVELS[i];scene='play';hideOverlays();show(ui.hud);show(ui.controls);hide(ui.bossHud);platforms=level.platforms.map(a=>({x:a[0],y:a[1],w:a[2],h:a[3],active:true}));hazards=level.hazards.map(a=>({x:a[0],y:a[1],w:a[2],h:a[3]}));cages=level.cages.map((a,n)=>({x:a[0],y:a[1],w:58,h:72,name:a[2],hp:1,saved:false,id:n,followX:a[0]+29,followY:a[1]+42,followDir:1,followFrame:0,followClock:n*.08,rescueClock:0,celebrateClock:0}));switches=[];enemies=level.enemies.map((a,n)=>makeEnemy(a[0],a[1],a[2],n));if(level.boss)enemies.push(makeBoss(level.boss));projectiles=[];particles=[];checkpoint={...level.start};Object.assign(hero,{x:level.start.x,y:level.start.y,vx:0,vy:0,hearts:3,cream:8,invuln:0});camera=0;updateHud();queueDialogue(levelDialogue(i));}
 function levelDialogue(i){return i===0?[["Cat Crumbwell",null,"Toast hills, armed donuts. Nice quiet morning."],["Auntie Saltina",null,"Find the cages! One egg will crack each lock."],["Cat Crumbwell",null,"Walk and shoot. Finally, instructions I respect."]]:i===1?[["Cat Crumbwell",null,"A factory powered by sprinkles. Somehow not the strangest Tuesday I’ve had."],["Auntie Saltina",null,"Sir Sprinkles guards the far gate. He rehearses his entrances."],["Cat Crumbwell",null,"I’ll try to look surprised."]]:[["Little Loop",null,"That is definitely Prathek’s fortress."],["Cat Crumbwell",null,"The upside-down birthday banner gave it away."],["Little Loop",null,"Some villains leave clues. He leaves decorating mistakes."],["Cat Crumbwell",null,"Let’s go correct both."]]}
 function makeEnemy(x,y,kind,n){return{x,y,w:kind==='roller'?54:50,h:kind==='roller'?54:58,kind,hp:kind==='roller'?2:1,maxHp:kind==='roller'?2:1,baseX:x,dir:n%2?1:-1,speed:kind==='roller'?48:30,cool:1.4+n*.2,dead:false,flash:0,animation:'walk',frame:0,frameClock:n*.07}}
 function makeBoss(b){return{x:b.x,y:b.y,w:b.kind==='prathek'?105:76,h:b.kind==='prathek'?105:82,kind:b.kind,hp:b.hp,maxHp:b.hp,baseX:b.x,dir:-1,speed:b.kind==='prathek'?75:48,cool:1.4,dead:false,flash:0,phase:1,state:'idle',stateClock:0,animation:'walk',frame:0,frameClock:0,introShown:false}}
-function queueDialogue(lines,done=null){dialogueQueue=[...lines];dialogueDone=done;scene='dialogue';show(ui.dialogue);advanceDialogue()}
-function advanceDialogue(){if(!dialogueQueue.length){hide(ui.dialogue);scene='play';const done=dialogueDone;dialogueDone=null;if(done)done();return}const [name,,text]=dialogueQueue.shift();document.querySelector('#speaker').textContent=name;drawPortrait(name);document.querySelector('#dialogueText').textContent=text;tone(360,.04,'triangle')}
+function renderDialogueLine(){
+  const [name,,text]=dialogueLines[dialogueIndex];
+  document.querySelector('#speaker').textContent=name;drawPortrait(name);document.querySelector('#dialogueText').textContent=text;
+  document.querySelector('#dialogueBack').disabled=dialogueIndex<=0;
+  document.querySelector('#dialogueNext').setAttribute('aria-label',dialogueIndex===dialogueLines.length-1?'Close dialogue':'Continue dialogue');
+  tone(360,.04,'triangle')
+}
+function queueDialogue(lines,done=null){dialogueLines=[...lines];dialogueIndex=0;dialogueDone=done;scene='dialogue';hide(ui.dialogueReview);show(ui.dialogue);renderDialogueLine()}
+function advanceDialogue(){
+  if(dialogueIndex<dialogueLines.length-1){dialogueIndex++;renderDialogueLine();return}
+  hide(ui.dialogue);scene='play';const done=dialogueDone;dialogueDone=null;
+  if(done)done();else if(dialogueLines.length)show(ui.dialogueReview)
+}
+function previousDialogue(){if(dialogueIndex>0){dialogueIndex--;renderDialogueLine()}}
+function reviewDialogue(){if(!dialogueLines.length)return;scene='dialogue';dialogueIndex=dialogueLines.length-1;hide(ui.dialogueReview);show(ui.dialogue);renderDialogueLine()}
 
 function overlap(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y}
 function gateIsOpen(){return cages.every(c=>c.saved)&&!enemies.some(e=>!e.dead&&(e.kind==='sprinkles'||e.kind==='prathek'))}
@@ -173,9 +199,9 @@ function defeatBoss(e){e.dead=true;hide(ui.bossHud);cages.filter(c=>c.saved).for
 function rescueDialogue(name){return name==='Mayor Twistopher'?[["Mayor Twistopher",null,"Cat! You came!"],["Cat Crumbwell",null,"Apparently I’m very predictable."],["Mayor Twistopher",null,"Emperor Prathek took the others to the Sprinkleworks."]]:name==='Knottingham'?[["Knottingham",null,"Freedom! I was running out of cage-related conversation."],["Cat Crumbwell",null,"Go rehearse something less specific."]]:name==='Auntie Saltina'?[["Auntie Saltina",null,"The Egg Sling suits you."],["Cat Crumbwell",null,"It clashes with the helmet, but I’ll survive."]]:name==='Baker Braidley'?[["Baker Braidley",null,"The throne room is ahead. Also, he still hasn’t fixed the banner."],["Cat Crumbwell",null,"Some crimes cannot be forgiven."]]:[["Little Loop",null,"You actually came."],["Cat Crumbwell",null,"You seem surprised."],["Little Loop",null,"Your reply record made this a fifty-fifty."],["Cat Crumbwell",null,"And yet here I am."]]}
 function rescue(c){c.saved=true;c.rescueClock=2;c.emotion='cheer';c.followX=c.x+29;c.followY=c.y+42;totalRescued++;burst(c.x+29,c.y+35,'#f6cf55',22);tone(820,.15,'triangle');setTimeout(()=>tone(1040,.18,'triangle'),100);say(c.name+' rescued!');updateHud();queueDialogue(rescueDialogue(c.name))}
 function finishLevel(){if(scene!=='play')return;if(levelIndex<LEVELS.length-1){scene='transition';document.querySelector('.game-card').classList.add('flash');setTimeout(()=>{document.querySelector('.game-card').classList.remove('flash');showLevelIntro(levelIndex+1)},400)}else showVictory()}
-function showVictory(){scene='victory';hide(ui.dialogue);hide(ui.hud);hide(ui.controls);hide(ui.bossHud);hideOverlays();ui.actLabel.textContent='FINAL CHAPTER';ui.levelLabel.textContent='Twistwick Saved';ui.victoryImage.src=images.victory.src;show(ui.victoryScreen);confetti(100);tone(523,.15);setTimeout(()=>tone(659,.15),160);setTimeout(()=>tone(784,.3),320)}
+function showVictory(){scene='victory';hide(ui.dialogue);hide(ui.dialogueReview);hide(ui.hud);hide(ui.controls);hide(ui.bossHud);hideOverlays();ui.actLabel.textContent='FINAL CHAPTER';ui.levelLabel.textContent='Twistwick Saved';ui.victoryImage.src=images.victory.src;show(ui.victoryScreen);confetti(100);tone(523,.15);setTimeout(()=>tone(659,.15),160);setTimeout(()=>tone(784,.3),320)}
 function showRewardDialogue(){hide(ui.victoryScreen);scene='endingStory';queueDialogue([["Mayor Twistopher",null,"Cat Crumbwell, you rescued our people and saved your birthday celebration!"],["Little Loop",null,"And you replied before the crisis was over."],["Cat Crumbwell",null,"Character growth."],["Auntie Saltina",null,"Please accept Twistwick’s highest honor: an Auntie Anne’s gift card."],["Cat Crumbwell",null,"You’re rewarding me for saving pretzels… with money to eat pretzels?"],["Mayor Twistopher",null,"We did not think this through."],["Little Loop",null,"Should we take it back?"],["Cat Crumbwell",null,"Absolutely not."]],showEnding)}
-function showEnding(){scene='ending';hide(ui.dialogue);hide(ui.hud);hide(ui.controls);hide(ui.bossHud);show(ui.endingScreen);confetti(160);tone(523,.15);setTimeout(()=>tone(659,.15),160);setTimeout(()=>tone(784,.3),320)}
+function showEnding(){scene='ending';hide(ui.dialogue);hide(ui.dialogueReview);hide(ui.hud);hide(ui.controls);hide(ui.bossHud);show(ui.endingScreen);confetti(160);tone(523,.15);setTimeout(()=>tone(659,.15),160);setTimeout(()=>tone(784,.3),320)}
 function confetti(n){for(let i=0;i<n;i++)particles.push({x:Math.random()*W,y:-Math.random()*H,vx:(Math.random()-.5)*150,vy:70+Math.random()*160,life:6,color:['#ef6380','#f3bc4d','#75b89a','#9575bd'][i%4],r:3+Math.random()*5,screen:true})}
 
 function bossIntroduction(boss){boss.introShown=true;return boss.kind==='prathek'?[["Emperor Prathek Donutwell",null,"Welcome, Catherine. You have arrived just in time to witness my victory."],["Cat Crumbwell",null,"You’re standing in my birthday decorations."],["Emperor Prathek Donutwell",null,"They improve the throne room."],["Cat Crumbwell",null,"You put the banner upside down."],["Emperor Prathek Donutwell",null,"It is displayed imperially."]]:[["Sir Sprinkles",null,"Halt! By royal order, you are officially surrounded!"],["Cat Crumbwell",null,"There’s nobody behind me."],["Sir Sprinkles",null,"Unofficially surrounded."]]}
@@ -205,12 +231,12 @@ function draw(){ctx.imageSmoothingEnabled=false;if(scene==='loading'||scene==='t
 function frame(t){const dt=Math.min(.034,(t-last)/1000||0);last=t;update(dt);draw();requestAnimationFrame(frame)}
 
 function pressKey(k,down){if(down&&!input[k])input[k+'Press']=true;input[k]=down}
-document.querySelector('#startButton').addEventListener('click',()=>{unlockAudio();tone(520,.08);storyStart()});document.querySelector('#continueButton').addEventListener('click',()=>{unlockAudio();showLevelIntro(0)});document.querySelector('#skipStory').addEventListener('click',()=>{unlockAudio();showLevelIntro(0)});document.querySelector('#nextStory').addEventListener('click',nextStory);document.querySelector('#dialogueNext').addEventListener('click',advanceDialogue);document.querySelector('#playAgain').addEventListener('click',()=>location.reload());document.querySelector('#muteButton').addEventListener('click',e=>{unlockAudio();muted=!muted;backgroundMusic.muted=muted;e.currentTarget.classList.toggle('muted',muted);e.currentTarget.setAttribute('aria-pressed',String(muted));e.currentTarget.setAttribute('aria-label',muted?'Unmute sound':'Mute sound');if(!muted&&MUSIC_FILE)backgroundMusic.play().catch(()=>{});say(muted?'Sound muted':'Sound on')});
+document.querySelector('#startButton').addEventListener('click',()=>{unlockAudio();tone(520,.08);storyStart()});document.querySelector('#continueButton').addEventListener('click',()=>{unlockAudio();showLevelIntro(0)});document.querySelector('#skipStory').addEventListener('click',()=>{unlockAudio();showLevelIntro(0)});document.querySelector('#previousStory').addEventListener('click',previousStory);document.querySelector('#nextStory').addEventListener('click',nextStory);document.querySelector('#levelBack').addEventListener('click',returnToStory);document.querySelector('#tutorialBack').addEventListener('click',backFromTutorial);document.querySelector('#dialogueBack').addEventListener('click',previousDialogue);document.querySelector('#dialogueNext').addEventListener('click',advanceDialogue);ui.dialogueReview.addEventListener('click',reviewDialogue);document.querySelector('#playAgain').addEventListener('click',()=>location.reload());document.querySelector('#muteButton').addEventListener('click',e=>{unlockAudio();muted=!muted;backgroundMusic.muted=muted;e.currentTarget.classList.toggle('muted',muted);e.currentTarget.setAttribute('aria-pressed',String(muted));e.currentTarget.setAttribute('aria-label',muted?'Unmute sound':'Mute sound');if(!muted&&MUSIC_FILE)backgroundMusic.play().catch(()=>{});say(muted?'Sound muted':'Sound on')});
 document.querySelector('#levelButton').addEventListener('click',beginLevel);
 document.querySelector('#tutorialButton').addEventListener('click',startTutorialLevel);
 document.querySelector('#victoryButton').addEventListener('click',showRewardDialogue);
 ui.retryLoad.addEventListener('click',loadAssets);
-const keyMap={ArrowLeft:'left',a:'left',A:'left',ArrowRight:'right',d:'right',D:'right',' ':'jump',ArrowUp:'jump',w:'jump',W:'jump',j:'shoot',J:'shoot'};addEventListener('keydown',e=>{if(scene==='tutorial'&&(e.key==='Enter'||e.key===' ')){e.preventDefault();startTutorialLevel();return}if(scene==='victory'&&(e.key==='Enter'||e.key===' ')){e.preventDefault();showRewardDialogue();return}if(scene==='dialogue'){if(e.key==='Enter'){e.preventDefault();advanceDialogue()}else if(keyMap[e.key])e.preventDefault();return}if(scene==='story'&&(e.key==='Enter'||e.key===' ')){e.preventDefault();nextStory();return}const k=keyMap[e.key];if(k&&scene==='play'){e.preventDefault();pressKey(k,true)}});addEventListener('keyup',e=>{const k=keyMap[e.key];if(k){e.preventDefault();pressKey(k,false)}});addEventListener('blur',()=>Object.keys(input).forEach(k=>input[k]=false));
+const keyMap={ArrowLeft:'left',a:'left',A:'left',ArrowRight:'right',d:'right',D:'right',' ':'jump',ArrowUp:'jump',w:'jump',W:'jump',j:'shoot',J:'shoot'};addEventListener('keydown',e=>{if(scene==='tutorial'&&(e.key==='Enter'||e.key===' ')){e.preventDefault();startTutorialLevel();return}if(scene==='victory'&&(e.key==='Enter'||e.key===' ')){e.preventDefault();showRewardDialogue();return}if(scene==='dialogue'){if(e.key==='Enter'){e.preventDefault();advanceDialogue()}else if(e.key==='ArrowLeft'||e.key==='Backspace'){e.preventDefault();previousDialogue()}else if(keyMap[e.key])e.preventDefault();return}if(scene==='story'){if(e.key==='Enter'||e.key===' '){e.preventDefault();nextStory()}else if(e.key==='ArrowLeft'||e.key==='Backspace'){e.preventDefault();previousStory()}return}const k=keyMap[e.key];if(k&&scene==='play'){e.preventDefault();pressKey(k,true)}});addEventListener('keyup',e=>{const k=keyMap[e.key];if(k){e.preventDefault();pressKey(k,false)}});addEventListener('blur',()=>Object.keys(input).forEach(k=>input[k]=false));
 
 function fetchImage(file){return new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(new Error(file));image.src=ASSET_ROOT+file})}
 async function loadAssets(){
