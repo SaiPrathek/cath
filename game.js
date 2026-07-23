@@ -45,7 +45,7 @@ const STORY = [
     ['Little Loop','He also destroyed your birthday decorations.'],
     ['Cat Crumbwell','That sounds personal.',true]
   ]},
-  {image:'story5',kicker:'One heroic sigh later',title:'The hero sets out',text:'Catherine equips her helmet, cape, shield, and Cream Cheese Sling, then faces Emperor Prathek’s distant fortress.',pan:[0,0],beats:[
+  {image:'story5',kicker:'One heroic sigh later',title:'The hero sets out',text:'Catherine equips her helmet, cape, shield, and Cream Cheese Sling—and reluctantly begins looking heroic.',pan:[0,0],beats:[
     ['Auntie Saltina','Twistwick needs a hero.'],
     ['Cat Crumbwell','Twistwick needs better security.'],
     ['Little Loop','For the record, we did ask nicely in the group chat.'],
