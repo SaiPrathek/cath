@@ -15,3 +15,13 @@ Create a cohesive character lineup for a 2D platformer: Cat Crumbwell, a heroic 
 5. **The Hero Sets Out:** Cat wears her Roman helmet and cape with sling and buckler equipped. Pretzel citizens cheer as she faces a road leading from Twistwick to Glazebald’s distant castle in a strong heroic sunrise composition.
 
 The generated concepts were downsampled to 320×180 with nearest-neighbor resampling, limited to 96 colors without dithering, and manually reviewed for character consistency and story readability.
+
+## Gameplay environments — second art pass
+
+Each level received a dedicated 16:9 background plate in the same Roman-bakery pixel style, with three visual depth layers, dark plum outlines, selective dithering, dense material detail, no characters, no HUD, and a readable lower playfield.
+
+- **Crumbly Commons:** Sunny bread countryside with toast cliffs, croissant hills, bagel cottages, flour windmills, wheat, sesame plants, banners, and jam waterways. A cleanup pass removed misleading decorative platforms.
+- **Sprinkleworks:** A raspberry frosting refinery with brass glaze pipes, sprinkle gears, candy-striped stacks, cream vats, conveyor silhouettes, furnace windows, and Roman donut banners.
+- **Glazed Gauntlet:** A moonlit donut fortress with dark-cookie walls, frosting battlements, gold columns, pretzel ironwork, torchlit arches, gates, chains, and a glowing glaze moat.
+
+The final environment plates were fitted to 960×540, contrast-tuned, limited to 128 colors without dithering, and integrated with subtle camera parallax.

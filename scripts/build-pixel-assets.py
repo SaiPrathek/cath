@@ -44,6 +44,7 @@ def cat_frame(frame, state):
     y = 5 + bob
     # cape and legs
     d.polygon([(7, y+11), (2, y+24), (10, y+21), (13, y+10)], fill=RED_DARK)
+    px(d, (4, y+17, 7, y+20), RED)
     leg_a = 9 + run
     leg_b = 19 - run
     px(d, (leg_a, y+23, leg_a+4, y+28), GOLD, INK)
@@ -51,23 +52,31 @@ def cat_frame(frame, state):
     # bagel body
     d.ellipse((5, y+5, 27, y+27), fill=GOLD, outline=INK, width=2)
     d.ellipse((12, y+12, 20, y+20), fill=GOLD_DARK, outline=INK, width=1)
+    d.arc((7, y+7, 25, y+25), 18, 162, fill=GOLD_HI, width=1)
     px(d, (8, y+8, 11, y+11), GOLD_HI)
     px(d, (22, y+9, 24, y+11), GOLD_HI)
+    for sx, sy in ((14, 8), (19, 7), (9, 17), (23, 17)):
+        px(d, (sx, y+sy, sx+1, y+sy), CREAM)
     # helmet + plume
     px(d, (6, y+3, 25, y+9), SILVER, INK)
     px(d, (9, y+1, 22, y+4), SILVER_HI, INK)
+    px(d, (7, y+8, 10, y+14), SILVER_DARK, INK)
+    px(d, (23, y+8, 26, y+14), SILVER_DARK, INK)
     d.polygon([(10, y+1), (12, y-4), (19, y-5), (24, y-1), (22, y+1)], fill=RED, outline=INK)
     # face
     px(d, (10, y+11, 12, y+13), INK)
     px(d, (22, y+11, 24, y+13), INK)
     px(d, (15, y+22, 19, y+23), INK)
+    px(d, (14, y+10, 20, y+11), GOLD_DARK)
     # buckler
     d.ellipse((2, y+14, 12, y+24), fill=SILVER, outline=INK, width=1)
     d.ellipse((5, y+17, 9, y+21), fill=GOLD, outline=INK)
+    px(d, (3, y+16, 4, y+21), SILVER_HI)
     # sling / shooting arm
     arm_y = y + (12 if state != "shoot" else 10 - (frame % 2))
     px(d, (24, arm_y, 30, arm_y+3), GOLD, INK)
-    px(d, (29, arm_y-1, 31, arm_y+4), CREAM, INK)
+    px(d, (29, arm_y-2, 31, arm_y+5), BROWN, INK)
+    px(d, (30, arm_y-1, 31, arm_y+3), CREAM)
     if state == "hurt":
         px(d, (9, y+11, 12, y+12), CREAM)
         px(d, (21, y+11, 24, y+12), CREAM)
@@ -95,9 +104,17 @@ def donut_frame(kind, frame):
     d.ellipse((cx-r, y, cx+r, y+2*r), fill=color, outline=INK, width=2)
     hole = 6 if boss else 4
     d.ellipse((cx-hole, y+r-hole, cx+hole, y+r+hole), fill=GOLD_DARK, outline=INK)
+    # frosting shine, drips, and readable sprinkles
+    d.arc((cx-r+2, y+2, cx+r-2, y+2*r-2), 195, 330, fill="#f39abe" if not boss else "#c97bd1", width=2)
+    for ox, oy, sprinkle in ((-8, 7, CREAM), (5, 5, GOLD_HI), (8, 13, "#71b7a0"), (-10, 16, "#e9a845")):
+        if abs(ox) < r-2:
+            px(d, (cx+ox, y+oy, cx+ox+1, y+oy+1), sprinkle)
+    px(d, (cx-r+3, y+r+5, cx-r+5, y+r+9), color, INK)
     # helmet
     px(d, (cx-r+2, y-3, cx+r-2, y+4), SILVER, INK)
     px(d, (cx-r+5, y-5, cx+r-6, y-2), SILVER_HI, INK)
+    px(d, (cx-r+3, y+3, cx-r+6, y+9), SILVER_DARK, INK)
+    px(d, (cx+r-6, y+3, cx+r-3, y+9), SILVER_DARK, INK)
     plume_w = 13 if boss else 9
     d.polygon([(cx-4, y-5), (cx-2, y-10), (cx+plume_w, y-9), (cx+plume_w+3, y-4)], fill=RED, outline=INK)
     # face
@@ -109,6 +126,7 @@ def donut_frame(kind, frame):
     if kind in ("scout", "archer"):
         px(d, (cx+r-1, y+4, cx+r+1, y+2*r+6), BROWN, INK)
         d.polygon([(cx+r-3, y+4), (cx+r, y-2), (cx+r+3, y+4)], fill=SILVER_HI, outline=INK)
+        px(d, (cx+r, y+8, cx+r+1, y+14), SILVER_HI)
     if kind in ("roller", "sprinkles", "king"):
         shield_r = 7 if not boss else 10
         d.ellipse((cx-r-5, y+r-shield_r, cx-r-5+2*shield_r, y+r+shield_r), fill=SILVER, outline=INK, width=1)
