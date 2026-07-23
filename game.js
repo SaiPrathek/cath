@@ -31,7 +31,7 @@ const STORY = [
     ['Sir Sprinkles','All of them, Your Glaziness?'],
     ['King Glazebald','Especially the little number-shaped ones.'],
     ['Mayor Twistopher','That feels oddly specific.'],
-    ['King Glazebald','Tyranny is in the details.',true]
+    ['King Glazebald','Of course. No candles, no wish. I have thought this through.',true]
   ]},
   {image:'story4',kicker:'Meanwhile • at Cat’s cottage',title:'The extremely dramatic knock',text:'Three escapees find Cat Crumbwell, the curly-haired birthday girl herself, enjoying one final quiet minute.',pan:[0,0],beats:[
     ['Cat Crumbwell','If this is about the noise complaint, my toaster has legal representation.'],
