@@ -10,8 +10,8 @@ Create a cohesive character lineup for a 2D platformer: Catherine, a heroic bage
 
 1. **Festival in Twistwick:** A bright morning wide shot of Pretzel Town. Every pretzel citizen is visibly happy, smiling, waving, or enthusiastically decorating for the birthday; Mayor Twistopher directs from a crate while two cheerful citizens arrange the blank banner.
 2. **Prathek’s Invasion:** Emperor Prathek arrives in a frosting-powered chariot with Roman donut legionaries, frightened pretzels, dramatic raspberry clouds, and airborne sprinkles.
-3. **The Great Pretzel Capture:** Unmistakable civilian pretzels are held in candy-bar cages while donut guards steal glowing Golden Salt Crystals and birthday candles, including number-shaped candles. Cat does not appear. All subjects remain inside safe margins in dramatic but playful raspberry light.
-4. **A Knock at Cat’s Door:** Cat answers her bakery-cottage door in pajamas with prominent dark-brown curls and no drink. Three desperate pretzels wait outside, while her helmet, buckler, cape, and Cream Cheese Sling hang visibly behind her.
+3. **The Great Pretzel Capture:** Unmistakable civilian pretzels are held in candy-bar cages while donut guards steal glowing Golden Salt Crystals and birthday candles, including number-shaped candles. Cath does not appear. All subjects remain inside safe margins in dramatic but playful raspberry light.
+4. **A Knock at Cath’s Door:** Cath answers her bakery-cottage door in pajamas with prominent dark-brown curls and no drink. Three desperate pretzels wait outside, while her helmet, buckler, cape, and Cream Cheese Sling hang visibly behind her.
 5. **The Hero Sets Out:** Catherine wears her Roman helmet and cape with sling and buckler equipped. Her dark-brown curls remain clearly visible beneath the helmet. Pretzel citizens cheer as she faces a road leading from Twistwick to Prathek’s distant fortress in a strong heroic sunrise composition.
 
 The generated concepts were downsampled to 320×180 with nearest-neighbor resampling, limited to 96 colors without dithering, and manually reviewed for character consistency and story readability.
@@ -32,7 +32,7 @@ Each level received a dedicated 16:9 background plate in the same Roman-bakery p
 
 ## Gameplay additions
 
-- Cat's complete animation set includes dark-brown curl clusters visible beneath both sides of her Roman helmet.
+- Cath's complete animation set includes dark-brown curl clusters visible beneath both sides of her Roman helmet.
 - Each named pretzel follower has distinct accessories plus follow, worried, and cheer states.
 - `sprites-prathek-v1.png` contains Catherine, the Donut Legion, Emperor Prathek, and the named pretzel follower animations.
 - `gates-prathek-v1.png` contains locked and open variants for the toast-stone Commons gate, brass Sprinkleworks gate, and dark-cookie Gauntlet portcullis.

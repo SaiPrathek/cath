@@ -1,4 +1,4 @@
-# Cat's Bagel Quest
+# Cath's Bagel Quest
 
 A bright Roman-bakery pixel-art birthday platformer for Catherine, published at [saiprathek.com/cath](https://saiprathek.com/cath/).
 
