@@ -57,15 +57,15 @@ const STORY = [
 ];
 
 const LEVELS = [
-  {act:'ACT I',name:'Crumbly Commons',desc:'A journey through toast country, where several overconfident donut patrols guard the road.',mission:'Rescue Mayor Twistopher • Reach the bakery gate',width:2200,start:{x:90,y:360},exit:2080,theme:'meadow',
-    platforms:[[0,460,2200,90]],
-    hazards:[], cages:[[1250,385,'Mayor Twistopher']], checkpoints:[1100], enemies:[[650,400,'scout'],[1050,400,'archer'],[1720,400,'roller']], switches:[], boss:null},
-  {act:'ACT II',name:'Sprinkleworks',desc:'The Donut Legion’s noisy factory, powered by brass gears, hot frosting, and questionable decisions.',mission:'Rescue two pretzels • Defeat Sir Sprinkles',width:2500,start:{x:80,y:360},exit:2390,theme:'factory',
-    platforms:[[0,460,2500,90]],
-    hazards:[], cages:[[1000,385,'Knottingham'],[1650,385,'Auntie Saltina']],checkpoints:[1260],enemies:[[700,400,'scout'],[1280,400,'archer'],[1840,400,'roller']],switches:[],boss:{x:2160,y:378,kind:'sprinkles',hp:4}},
-  {act:'ACT III',name:'The Glazed Gauntlet',desc:'Emperor Prathek’s theatrical fortress, ending in a royal showdown with one extremely dramatic donut.',mission:'Rescue the final two pretzels • Defeat Emperor Prathek',width:2850,start:{x:70,y:360},exit:2740,theme:'castle',
-    platforms:[[0,460,2850,90]],
-    hazards:[],cages:[[1100,385,'Baker Braidley'],[1780,385,'Little Loop']],checkpoints:[1380,1980],enemies:[[720,400,'scout'],[1400,400,'archer'],[1940,400,'roller']],switches:[],boss:{x:2380,y:350,kind:'prathek',hp:6}}
+  {act:'ACT I',name:'Crumbly Commons',desc:'A journey through toast country, where several overconfident donut patrols guard the road.',mission:'Rescue Mayor Twistopher • Reach the bakery gate',width:3600,start:{x:90,y:360},exit:3480,theme:'meadow',
+    platforms:[[0,460,3600,90]],
+    hazards:[], cages:[[2150,385,'Mayor Twistopher']], checkpoints:[1900], enemies:[[750,400,'scout'],[1450,400,'archer'],[2850,400,'roller']], switches:[], boss:null},
+  {act:'ACT II',name:'Sprinkleworks',desc:'The Donut Legion’s noisy factory, powered by brass gears, hot frosting, and questionable decisions.',mission:'Rescue two pretzels • Defeat Sir Sprinkles',width:5320,start:{x:80,y:360},exit:5200,theme:'factory',
+    platforms:[[0,460,5320,90]],
+    hazards:[], cages:[[1600,385,'Knottingham'],[3200,385,'Auntie Saltina']],checkpoints:[2750],enemies:[[800,400,'scout'],[2400,400,'archer'],[3900,400,'roller']],switches:[],boss:{x:4850,y:378,kind:'sprinkles',hp:4}},
+  {act:'ACT III',name:'The Glazed Gauntlet',desc:'Emperor Prathek’s theatrical fortress, ending in a royal showdown with one extremely dramatic donut.',mission:'Rescue the final two pretzels • Defeat Emperor Prathek',width:5920,start:{x:70,y:360},exit:5800,theme:'castle',
+    platforms:[[0,460,5920,90]],
+    hazards:[],cages:[[1700,385,'Baker Braidley'],[3400,385,'Little Loop']],checkpoints:[2150,3900],enemies:[[850,400,'scout'],[2550,400,'archer'],[4250,400,'roller']],switches:[],boss:{x:5350,y:350,kind:'prathek',hp:6}}
 ];
 
 let scene='loading', storyIndex=0, storyBeat=0, levelIndex=0, level=null, last=0, camera=0, totalRescued=0, muted=false, audio=null, toastTimer=0, dialogueLines=[], dialogueIndex=-1, dialogueDone=null, tutorialShown=false;
@@ -205,7 +205,7 @@ function showEnding(){scene='ending';hide(ui.dialogue);hide(ui.dialogueReview);h
 function confetti(n){for(let i=0;i<n;i++)particles.push({x:Math.random()*W,y:-Math.random()*H,vx:(Math.random()-.5)*150,vy:70+Math.random()*160,life:6,color:['#ef6380','#f3bc4d','#75b89a','#9575bd'][i%4],r:3+Math.random()*5,screen:true})}
 
 function bossIntroduction(boss){boss.introShown=true;return boss.kind==='prathek'?[["Emperor Prathek Donutwell",null,"Welcome, Catherine. You have arrived just in time to witness my victory."],["Cath Crumbwell",null,"You’re standing in my birthday decorations."],["Emperor Prathek Donutwell",null,"They improve the throne room."],["Cath Crumbwell",null,"Those number candles spell two plus two equals five."],["Emperor Prathek Donutwell",null,"It is imperial mathematics."]]:[["Sir Sprinkles",null,"Halt! By royal order, you are officially surrounded!"],["Cath Crumbwell",null,"There’s nobody behind me."],["Sir Sprinkles",null,"Unofficially surrounded."]]}
-function update(dt){if(scene==='play'){updateHero(dt);updateEnemies(dt);updateFollowers(dt);updateProjectiles(dt);if(scene==='play'){const boss=enemies.find(e=>e.kind==='prathek'||e.kind==='sprinkles');if(boss&&Math.abs(hero.x-boss.x)<620){show(ui.bossHud);ui.bossName.textContent=boss.kind==='prathek'?'EMPEROR PRATHEK':'SIR SPRINKLES';ui.bossBar.style.width=Math.max(0,boss.hp/boss.maxHp*100)+'%';if(!boss.introShown)queueDialogue(bossIntroduction(boss))}else hide(ui.bossHud);camera+=(Math.max(0,Math.min(level.width-W,hero.x-W*.38))-camera)*Math.min(1,dt*5)}}for(const p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=(p.screen?80:380)*dt;p.life-=dt}particles=particles.filter(p=>p.life>0);input.jumpPress=input.shootPress=false}
+function update(dt){if(scene==='play'){updateHero(dt);updateEnemies(dt);updateFollowers(dt);updateProjectiles(dt);if(scene==='play'){const boss=enemies.find(e=>e.kind==='prathek'||e.kind==='sprinkles');if(boss&&Math.abs(hero.x-boss.x)<450){show(ui.bossHud);ui.bossName.textContent=boss.kind==='prathek'?'EMPEROR PRATHEK':'SIR SPRINKLES';ui.bossBar.style.width=Math.max(0,boss.hp/boss.maxHp*100)+'%';if(!boss.introShown)queueDialogue(bossIntroduction(boss))}else hide(ui.bossHud);camera+=(Math.max(0,Math.min(level.width-W,hero.x-W*.38))-camera)*Math.min(1,dt*5)}}for(const p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=(p.screen?80:380)*dt;p.life-=dt}particles=particles.filter(p=>p.life>0);input.jumpPress=input.shootPress=false}
 
 function snap(v){return Math.round(v)}
 function drawSprite(key,x,y,w,h,flip=false,alpha=1,target=ctx){const box=SPRITE_FRAMES[key];if(!box||!images.sprites)return;target.save();target.imageSmoothingEnabled=false;target.globalAlpha=alpha;if(flip){target.translate(snap(x+w),snap(y));target.scale(-1,1);target.drawImage(images.sprites,...box,0,0,snap(w),snap(h))}else target.drawImage(images.sprites,...box,snap(x),snap(y),snap(w),snap(h));target.restore()}
