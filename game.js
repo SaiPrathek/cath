@@ -58,14 +58,14 @@ const STORY = [
 
 const LEVELS = [
   {act:'ACT I',name:'Crumbly Commons',desc:'A journey through toast country, where several overconfident donut patrols guard the road.',mission:'Rescue Mayor Twistopher • Reach the bakery gate',width:3600,start:{x:90,y:360},exit:3480,theme:'meadow',
-    platforms:[[0,460,3600,90]],
-    hazards:[], cages:[[2150,385,'Mayor Twistopher']], checkpoints:[1900], enemies:[[750,400,'scout'],[1450,400,'archer'],[2850,400,'roller']], switches:[], boss:null},
+    platforms:[[0,460,3600,90],[1250,428,400,32],[2000,428,450,32],[3000,428,300,32]],
+    hazards:[], cages:[[2150,353,'Mayor Twistopher']], checkpoints:[1900], enemies:[[750,400,'scout'],[1450,368,'archer'],[2850,400,'roller']], switches:[], boss:null},
   {act:'ACT II',name:'Sprinkleworks',desc:'The Donut Legion’s noisy factory, powered by brass gears, hot frosting, and questionable decisions.',mission:'Rescue two pretzels • Defeat Sir Sprinkles',width:5320,start:{x:80,y:360},exit:5200,theme:'factory',
-    platforms:[[0,460,5320,90]],
-    hazards:[], cages:[[1600,385,'Knottingham'],[3200,385,'Auntie Saltina']],checkpoints:[2750],enemies:[[800,400,'scout'],[2400,400,'archer'],[3900,400,'roller']],switches:[],boss:{x:4850,y:378,kind:'sprinkles',hp:4}},
+    platforms:[[0,460,5320,90],[1350,428,450,32],[2200,428,400,32],[3000,428,500,32],[3700,428,400,32]],
+    hazards:[], cages:[[1600,353,'Knottingham'],[3200,353,'Auntie Saltina']],checkpoints:[2750],enemies:[[800,400,'scout'],[2400,368,'archer'],[3900,368,'roller']],switches:[],boss:{x:4850,y:378,kind:'sprinkles',hp:4}},
   {act:'ACT III',name:'The Glazed Gauntlet',desc:'Emperor Prathek’s theatrical fortress, ending in a royal showdown with one extremely dramatic donut.',mission:'Rescue the final two pretzels • Defeat Emperor Prathek',width:5920,start:{x:70,y:360},exit:5800,theme:'castle',
-    platforms:[[0,460,5920,90]],
-    hazards:[],cages:[[1700,385,'Baker Braidley'],[3400,385,'Little Loop']],checkpoints:[2150,3900],enemies:[[850,400,'scout'],[2550,400,'archer'],[4250,400,'roller']],switches:[],boss:{x:5350,y:350,kind:'prathek',hp:6}}
+    platforms:[[0,460,5920,90],[1450,428,500,32],[2350,428,400,32],[3150,428,500,32],[4050,428,400,32]],
+    hazards:[],cages:[[1700,353,'Baker Braidley'],[3400,353,'Little Loop']],checkpoints:[2150,3900],enemies:[[850,400,'scout'],[2550,368,'archer'],[4250,368,'roller']],switches:[],boss:{x:5350,y:350,kind:'prathek',hp:6}}
 ];
 
 let scene='loading', storyIndex=0, storyBeat=0, levelIndex=0, level=null, last=0, camera=0, totalRescued=0, muted=false, audio=null, toastTimer=0, dialogueLines=[], dialogueIndex=-1, dialogueDone=null, tutorialShown=false;
@@ -146,7 +146,7 @@ function reviewDialogue(){if(!dialogueLines.length)return;scene='dialogue';dialo
 function overlap(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y}
 function gateIsOpen(){return cages.every(c=>c.saved)&&!enemies.some(e=>!e.dead&&(e.kind==='sprinkles'||e.kind==='prathek'))}
 function animate(entity,state,count,speed,dt){if(entity.animation!==state){entity.animation=state;entity.frame=0;entity.frameClock=0}entity.frameClock+=dt;if(entity.frameClock>=speed){entity.frameClock-=speed;entity.frame=(entity.frame+1)%count}}
-function solidCollision(prevY){hero.onGround=false;for(const p of platforms){if(!p.active)continue;if(hero.x+hero.w>p.x&&hero.x<p.x+p.w&&hero.y+hero.h>=p.y&&prevY+hero.h<=p.y+8&&hero.vy>=0){hero.y=p.y-hero.h;hero.vy=0;hero.onGround=true}}}
+function solidCollision(prevY){const wasGround=hero.onGround,currentBottom=hero.y+hero.h;let landingY=null;hero.onGround=false;for(const p of platforms){if(!p.active||hero.x+hero.w<=p.x||hero.x>=p.x+p.w||hero.vy<0)continue;const landed=currentBottom>=p.y&&prevY+hero.h<=p.y+8,stepped=wasGround&&currentBottom>p.y&&currentBottom-p.y<=40;if(landed||stepped)landingY=landingY===null?p.y-hero.h:Math.min(landingY,p.y-hero.h)}if(landingY!==null){hero.y=landingY;hero.vy=0;hero.onGround=true}}
 function updateHero(dt){hero.shootCd=Math.max(0,hero.shootCd-dt);hero.invuln=Math.max(0,hero.invuln-dt);hero.creamClock+=dt;if(hero.cream<8&&hero.creamClock>1.35){hero.cream=Math.min(8,hero.cream+1);hero.creamClock=0;updateHud()}
   if(input.jumpPress)hero.jumpBuffer=.13;else hero.jumpBuffer=Math.max(0,hero.jumpBuffer-dt);hero.coyote=hero.onGround?.11:Math.max(0,hero.coyote-dt);
   const move=(input.right?1:0)-(input.left?1:0);if(move)hero.dir=move;
