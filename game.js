@@ -16,8 +16,8 @@ const ASSET_FILES={sprites:'sprites-prathek-v1.png',tiles:'tiles.png',gates:'gat
 const STORY = [
   {image:'story1',kicker:'Twistwick • one peaceful morning',title:'A perfectly twisted birthday',text:'Twistwick’s Pretzel People prepare a surprise celebration for their favorite bagel hero. Nothing is on fire yet.',pan:[-5,1],beats:[
     ['Mayor Twistopher','Citizens! Today’s celebration must be perfect.'],
-    ['Little Loop','The birthday banner is upside down.'],
-    ['Mayor Twistopher','Then it is perfectly upside down.'],
+    ['Little Loop','The red carpet is three feet too short.'],
+    ['Mayor Twistopher','Catherine is a hero. She can jump the rest.'],
     ['Pretzel Citizen','Is that enormous shadow part of the entertainment?'],
     ['Mayor Twistopher','I’m going to say yes until it becomes dangerous.',true]
   ]},
@@ -30,14 +30,14 @@ const STORY = [
   {image:'story3',kicker:'The Great Sprinkle Raid',title:'Prathek cancels the party',text:'Emperor Prathek confiscates the Salt Crystals and birthday candles, then cages the Pretzel People for good measure.',pan:[0,0],beats:[
     ['Emperor Prathek Donutwell','Take the Salt Crystals! Capture the Pretzel People! Confiscate the birthday candles!'],
     ['Sir Sprinkles','All of them, Your Imperial Glaze?'],
-    ['Emperor Prathek Donutwell','Especially the little number-shaped ones.'],
-    ['Mayor Twistopher','That feels oddly specific.'],
-    ['Emperor Prathek Donutwell','Of course. No candles, no wish. I have thought this through.',true]
+    ['Emperor Prathek Donutwell','Especially the number-shaped ones. Catherine uses mathematics to aim that Egg Sling!'],
+    ['Mayor Twistopher','She teaches math and science. Taking candles won’t stop her.'],
+    ['Emperor Prathek Donutwell','Then bring me the science-shaped candles!',true]
   ]},
   {image:'story4',kicker:'Meanwhile • at Cath’s cottage',title:'The extremely dramatic knock',text:'Three escapees find Cath Crumbwell, the curly-haired birthday girl herself, enjoying one final quiet minute.',pan:[0,0],beats:[
     ['Cath Crumbwell','If this is about the noise complaint, my toaster has legal representation.'],
     ['Auntie Saltina','Cath, we need you, dummy. Emperor Prathek captured the town!'],
-    ['Cath Crumbwell','Strong opening. What happened?'],
+    ['Cath Crumbwell','Good morning to you too. Tell me everything.'],
     ['Little Loop','We tried messaging first, but you’re a little spotty at replying.'],
     ['Cath Crumbwell','I reply eventually.'],
     ['Little Loop','You sent “noted” two days later.'],
@@ -48,11 +48,11 @@ const STORY = [
   {image:'story5',kicker:'One heroic sigh later',title:'The hero sets out',text:'Catherine equips her helmet, cape, shield, and Egg Sling—and reluctantly begins looking heroic.',pan:[0,0],beats:[
     ['Auntie Saltina','Twistwick needs a hero.'],
     ['Cath Crumbwell','Twistwick needs better security.'],
-    ['Little Loop','For the record, we did ask nicely in the group chat.'],
-    ['Cath Crumbwell','I was going to reply.'],
-    ['Little Loop','Eventually.'],
+    ['Little Loop','We loaded your Egg Sling.'],
+    ['Cath Crumbwell','How many eggs?'],
+    ['Little Loop','Six. There were eight before breakfast.'],
     ['Cath Crumbwell','Fine. I’ll save the town, the pretzels, and my birthday.',true],
-    ['Emperor Prathek Donutwell','I OBJECT TO THAT ORDER!',true]
+    ['Little Loop','We’ll leave out the sigh when we tell this story.',true]
   ]}
 ];
 
@@ -124,7 +124,7 @@ function beginLevel(){if(levelIndex===0&&!tutorialShown){tutorialShown=true;scen
 function startTutorialLevel(){if(scene!=='tutorial')return;loadLevel(0)}
 function backFromTutorial(){tutorialShown=false;showLevelIntro(0)}
 function loadLevel(i){levelIndex=i;level=LEVELS[i];scene='play';hideOverlays();show(ui.hud);show(ui.controls);hide(ui.bossHud);platforms=level.platforms.map(a=>({x:a[0],y:a[1],w:a[2],h:a[3],active:true}));hazards=level.hazards.map(a=>({x:a[0],y:a[1],w:a[2],h:a[3]}));cages=level.cages.map((a,n)=>({x:a[0],y:a[1],w:58,h:72,name:a[2],hp:1,saved:false,id:n,followX:a[0]+29,followY:a[1]+42,followDir:1,followFrame:0,followClock:n*.08,rescueClock:0,celebrateClock:0}));switches=[];enemies=level.enemies.map((a,n)=>makeEnemy(a[0],a[1],a[2],n));if(level.boss)enemies.push(makeBoss(level.boss));projectiles=[];particles=[];checkpoint={...level.start};Object.assign(hero,{x:level.start.x,y:level.start.y,vx:0,vy:0,hearts:3,cream:8,invuln:0});camera=0;updateHud();queueDialogue(levelDialogue(i));}
-function levelDialogue(i){return i===0?[["Cath Crumbwell",null,"Toast hills, armed donuts. Nice quiet morning."],["Auntie Saltina",null,"Find the cages! One egg will crack each lock."],["Cath Crumbwell",null,"Walk and shoot. Finally, instructions I respect."]]:i===1?[["Cath Crumbwell",null,"A factory powered by sprinkles. Somehow not the strangest Tuesday I’ve had."],["Auntie Saltina",null,"Sir Sprinkles guards the far gate. He rehearses his entrances."],["Cath Crumbwell",null,"I’ll try to look surprised."]]:[["Little Loop",null,"That is definitely Prathek’s fortress."],["Cath Crumbwell",null,"The upside-down birthday banner gave it away."],["Little Loop",null,"Some villains leave clues. He leaves decorating mistakes."],["Cath Crumbwell",null,"Let’s go correct both."]]}
+function levelDialogue(i){return i===0?[["Cath Crumbwell",null,"Toast hills, armed donuts. Nice quiet morning."],["Auntie Saltina",null,"Find the cages! One egg will crack each lock."],["Cath Crumbwell",null,"Walk and shoot. Finally, instructions I respect."]]:i===1?[["Cath Crumbwell",null,"A factory powered by sprinkles. Somehow not the strangest Wednesday I’ve had."],["Auntie Saltina",null,"Sir Sprinkles guards the far gate. He rehearses his entrances."],["Cath Crumbwell",null,"I’ll try to look surprised."]]:[["Little Loop",null,"That is definitely Prathek’s fortress."],["Cath Crumbwell",null,"The giant crown on the roof gave it away."],["Little Loop",null,"Some villains leave clues. He builds his into the skyline."],["Cath Crumbwell",null,"At least we won’t get lost."]]}
 function makeEnemy(x,y,kind,n){return{x,y,w:kind==='roller'?54:50,h:kind==='roller'?54:58,kind,hp:kind==='roller'?2:1,maxHp:kind==='roller'?2:1,baseX:x,dir:n%2?1:-1,speed:kind==='roller'?48:30,cool:1.4+n*.2,dead:false,flash:0,animation:'walk',frame:0,frameClock:n*.07}}
 function makeBoss(b){return{x:b.x,y:b.y,w:b.kind==='prathek'?105:76,h:b.kind==='prathek'?105:82,kind:b.kind,hp:b.hp,maxHp:b.hp,baseX:b.x,dir:-1,speed:b.kind==='prathek'?75:48,cool:1.4,dead:false,flash:0,phase:1,state:'idle',stateClock:0,animation:'walk',frame:0,frameClock:0,introShown:false}}
 function renderDialogueLine(){
@@ -193,10 +193,10 @@ function updateProjectiles(dt){for(const p of projectiles){p.x+=p.vx*dt;p.y+=p.v
     for(const c of cages)if(!c.saved&&overlap(p,c)&&p.owner==='hero'){p.life=0;c.hp--;burst(p.x,p.y,'#f3c84f',8);if(c.hp<=0)rescue(c)}
     for(const e of enemies)if(!e.dead&&overlap(p,e)&&p.owner==='hero'){p.life=0;hitEnemy(e,p)}
   }projectiles=projectiles.filter(p=>p.life>0&&p.x>-100&&p.x<level.width+100&&p.y<700)}
-function hitEnemy(e,p){if(e.kind==='prathek'){e.hp--;e.flash=.18;burst(p.x,p.y,'#f0a2c0',14);shake();tone(170,.08,'square');if(e.phase===1&&e.hp===3){e.phase=2;e.state='roll';queueDialogue([["Emperor Prathek Donutwell",null,"Impossible! Initiate rolling majestically!"],["Cath Crumbwell",null,"That’s just rolling."],["Emperor Prathek Donutwell",null,"Majestically!"]]);return}if(e.hp<=0)defeatBoss(e);updateHud();return}
+function hitEnemy(e,p){if(e.kind==='prathek'){e.hp--;e.flash=.18;burst(p.x,p.y,'#f0a2c0',14);shake();tone(170,.08,'square');if(e.phase===1&&e.hp===3){e.phase=2;e.state='roll';queueDialogue([["Emperor Prathek Donutwell",null,"Enough! Behold the unstoppable force of angular momentum!"],["Cath Crumbwell",null,"You stopped moving to announce it."],["Emperor Prathek Donutwell",null,"Dramatic pauses do not count!"]]);return}if(e.hp<=0)defeatBoss(e);updateHud();return}
   e.hp--;e.flash=.15;burst(p.x,p.y,'#fff0c8',8);if(e.hp<=0){e.dead=true;updateHud();tone(160,.12,'sawtooth');if(e.kind==='sprinkles'){cages.filter(c=>c.saved).forEach(c=>{c.celebrateClock=3;c.emotion='cheer'});queueDialogue([["Sir Sprinkles",null,"I have been… thoroughly egged."],["Cath Crumbwell",null,"You fought bravely."],["Sir Sprinkles",null,"Truly?"],["Cath Crumbwell",null,"No. But you looked like you needed that."]]);}}}
 function defeatBoss(e){e.dead=true;hide(ui.bossHud);cages.filter(c=>c.saved).forEach(c=>{c.celebrateClock=3;c.emotion='cheer'});updateHud();for(let i=0;i<70;i++)burst(e.x+e.w/2,e.y+e.h/2,['#f4bb4f','#e75f7b','#8b72bd'][i%3],1);queueDialogue([["Emperor Prathek Donutwell",null,"Enjoy your victory, Catherine. I shall return!"],["Cath Crumbwell",null,"Take your time. Sudden movements are dangerous at your age."],["Emperor Prathek Donutwell",null,"I am not old!"],["Cath Crumbwell",null,"Your knees made the boss music when you stood up."],["Little Loop",null,"Should we fetch the royal heating pad?"]]);tone(90,.4,'sawtooth')}
-function rescueDialogue(name){return name==='Mayor Twistopher'?[["Mayor Twistopher",null,"Cath! You came!"],["Cath Crumbwell",null,"Apparently I’m very predictable."],["Mayor Twistopher",null,"Emperor Prathek took the others to the Sprinkleworks."]]:name==='Knottingham'?[["Knottingham",null,"Freedom! I was running out of cage-related conversation."],["Cath Crumbwell",null,"Go rehearse something less specific."]]:name==='Auntie Saltina'?[["Auntie Saltina",null,"The Egg Sling suits you."],["Cath Crumbwell",null,"It clashes with the helmet, but I’ll survive."]]:name==='Baker Braidley'?[["Baker Braidley",null,"The throne room is ahead. Also, he still hasn’t fixed the banner."],["Cath Crumbwell",null,"Some crimes cannot be forgiven."]]:[["Little Loop",null,"You actually came."],["Cath Crumbwell",null,"You seem surprised."],["Little Loop",null,"Your reply record made this a fifty-fifty."],["Cath Crumbwell",null,"And yet here I am."]]}
+function rescueDialogue(name){return name==='Mayor Twistopher'?[["Mayor Twistopher",null,"Cath! You came!"],["Cath Crumbwell",null,"Apparently I’m very predictable."],["Mayor Twistopher",null,"Emperor Prathek took the others to the Sprinkleworks."]]:name==='Knottingham'?[["Knottingham",null,"Cath! My escape plan worked perfectly."],["Cath Crumbwell",null,"Your escape plan was me."]]:name==='Auntie Saltina'?[["Auntie Saltina",null,"The Egg Sling suits you."],["Cath Crumbwell",null,"It clashes with the helmet, but I’ll survive."]]:name==='Baker Braidley'?[["Baker Braidley",null,"The throne room is ahead. Also, he’s doing arithmetic with the stolen candles."],["Cath Crumbwell",null,"This just became an educational emergency."]]:[["Little Loop",null,"You found me!"],["Cath Crumbwell",null,"You were the loudest prisoner."],["Little Loop",null,"I was maintaining morale."],["Cath Crumbwell",null,"Yours, specifically."]]}
 function rescue(c){c.saved=true;c.rescueClock=2;c.emotion='cheer';c.followX=c.x+29;c.followY=c.y+42;totalRescued++;burst(c.x+29,c.y+35,'#f6cf55',22);tone(820,.15,'triangle');setTimeout(()=>tone(1040,.18,'triangle'),100);say(c.name+' rescued!');updateHud();queueDialogue(rescueDialogue(c.name))}
 function finishLevel(){if(scene!=='play')return;if(levelIndex<LEVELS.length-1){scene='transition';document.querySelector('.game-card').classList.add('flash');setTimeout(()=>{document.querySelector('.game-card').classList.remove('flash');showLevelIntro(levelIndex+1)},400)}else showVictory()}
 function showVictory(){scene='victory';hide(ui.dialogue);hide(ui.dialogueReview);hide(ui.hud);hide(ui.controls);hide(ui.bossHud);hideOverlays();ui.actLabel.textContent='FINAL CHAPTER';ui.levelLabel.textContent='Twistwick Saved';ui.victoryImage.src=images.victory.src;show(ui.victoryScreen);confetti(100);tone(523,.15);setTimeout(()=>tone(659,.15),160);setTimeout(()=>tone(784,.3),320)}
@@ -204,7 +204,7 @@ function showRewardDialogue(){hide(ui.victoryScreen);scene='endingStory';queueDi
 function showEnding(){scene='ending';hide(ui.dialogue);hide(ui.dialogueReview);hide(ui.hud);hide(ui.controls);hide(ui.bossHud);show(ui.endingScreen);confetti(160);tone(523,.15);setTimeout(()=>tone(659,.15),160);setTimeout(()=>tone(784,.3),320)}
 function confetti(n){for(let i=0;i<n;i++)particles.push({x:Math.random()*W,y:-Math.random()*H,vx:(Math.random()-.5)*150,vy:70+Math.random()*160,life:6,color:['#ef6380','#f3bc4d','#75b89a','#9575bd'][i%4],r:3+Math.random()*5,screen:true})}
 
-function bossIntroduction(boss){boss.introShown=true;return boss.kind==='prathek'?[["Emperor Prathek Donutwell",null,"Welcome, Catherine. You have arrived just in time to witness my victory."],["Cath Crumbwell",null,"You’re standing in my birthday decorations."],["Emperor Prathek Donutwell",null,"They improve the throne room."],["Cath Crumbwell",null,"You put the banner upside down."],["Emperor Prathek Donutwell",null,"It is displayed imperially."]]:[["Sir Sprinkles",null,"Halt! By royal order, you are officially surrounded!"],["Cath Crumbwell",null,"There’s nobody behind me."],["Sir Sprinkles",null,"Unofficially surrounded."]]}
+function bossIntroduction(boss){boss.introShown=true;return boss.kind==='prathek'?[["Emperor Prathek Donutwell",null,"Welcome, Catherine. You have arrived just in time to witness my victory."],["Cath Crumbwell",null,"You’re standing in my birthday decorations."],["Emperor Prathek Donutwell",null,"They improve the throne room."],["Cath Crumbwell",null,"Those number candles spell two plus two equals five."],["Emperor Prathek Donutwell",null,"It is imperial mathematics."]]:[["Sir Sprinkles",null,"Halt! By royal order, you are officially surrounded!"],["Cath Crumbwell",null,"There’s nobody behind me."],["Sir Sprinkles",null,"Unofficially surrounded."]]}
 function update(dt){if(scene==='play'){updateHero(dt);updateEnemies(dt);updateFollowers(dt);updateProjectiles(dt);if(scene==='play'){const boss=enemies.find(e=>e.kind==='prathek'||e.kind==='sprinkles');if(boss&&Math.abs(hero.x-boss.x)<620){show(ui.bossHud);ui.bossName.textContent=boss.kind==='prathek'?'EMPEROR PRATHEK':'SIR SPRINKLES';ui.bossBar.style.width=Math.max(0,boss.hp/boss.maxHp*100)+'%';if(!boss.introShown)queueDialogue(bossIntroduction(boss))}else hide(ui.bossHud);camera+=(Math.max(0,Math.min(level.width-W,hero.x-W*.38))-camera)*Math.min(1,dt*5)}}for(const p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=(p.screen?80:380)*dt;p.life-=dt}particles=particles.filter(p=>p.life>0);input.jumpPress=input.shootPress=false}
 
 function snap(v){return Math.round(v)}

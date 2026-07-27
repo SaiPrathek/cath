@@ -4,14 +4,14 @@ The production artwork was generated as original, low-resolution Roman-bakery pi
 
 ## Character direction
 
-Create a cohesive character lineup for a 2D platformer: Catherine, a heroic bagel girl with a red-plumed Roman helmet, red cape, silver buckler, and cream-cheese sling; Emperor Prathek Donutwell, a purple raspberry-glazed donut tyrant with a gold crown layered over a red-plumed helmet, dark moustache, ornate round shield, frosting weapon, and an oversized curtain-like cape; Roman donut scout, archer, rolling shield guard, and Sir Sprinkles; expressive worried and cheering pretzel citizens. Use readable 32–48 pixel sprite proportions and consistent armor materials.
+Create a cohesive character lineup for a 2D platformer: Catherine, a heroic bagel girl with a red-plumed Roman helmet, red cape, silver buckler, and Egg Sling; Emperor Prathek Donutwell, a purple raspberry-glazed donut tyrant with a gold crown layered over a red-plumed helmet, dark moustache, ornate round shield, frosting weapon, and an oversized curtain-like cape; Roman donut scout, archer, rolling shield guard, and Sir Sprinkles; expressive worried and cheering pretzel citizens. Use readable 32–48 pixel sprite proportions and consistent armor materials.
 
 ## Story scenes
 
 1. **Festival in Twistwick:** A bright morning wide shot of Pretzel Town. Every pretzel citizen is visibly happy, smiling, waving, or enthusiastically decorating for the birthday; Mayor Twistopher directs from a crate while two cheerful citizens arrange the blank banner.
 2. **Prathek’s Invasion:** Emperor Prathek arrives in a frosting-powered chariot with Roman donut legionaries, frightened pretzels, dramatic raspberry clouds, and airborne sprinkles.
 3. **The Great Pretzel Capture:** Unmistakable civilian pretzels are held in candy-bar cages while donut guards steal glowing Golden Salt Crystals and birthday candles, including number-shaped candles. Cath does not appear. All subjects remain inside safe margins in dramatic but playful raspberry light.
-4. **A Knock at Cath’s Door:** Cath answers her bakery-cottage door in pajamas with prominent dark-brown curls and no drink. Three desperate pretzels wait outside, while her helmet, buckler, cape, and Cream Cheese Sling hang visibly behind her.
+4. **A Knock at Cath’s Door:** Cath answers her bakery-cottage door in pajamas with prominent dark-brown curls and no drink. Three desperate pretzels wait outside, while her helmet, buckler, cape, and Egg Sling hang visibly behind her.
 5. **The Hero Sets Out:** Catherine wears her Roman helmet and cape with sling and buckler equipped. Her dark-brown curls remain clearly visible beneath the helmet. Pretzel citizens cheer as she faces a road leading from Twistwick to Prathek’s distant fortress in a strong heroic sunrise composition.
 
 The generated concepts were downsampled to 320×180 with nearest-neighbor resampling, limited to 96 colors without dithering, and manually reviewed for character consistency and story readability.
