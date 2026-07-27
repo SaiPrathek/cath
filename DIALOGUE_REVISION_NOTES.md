@@ -80,9 +80,9 @@ These candidates preserve the existing beat counts.
 
 ### Scene 3
 
-- Emperor Prathek: “Especially the number-shaped ones. Catherine uses mathematics to aim that Egg Sling!”
-- Mayor Twistopher: “She teaches math and science. Taking candles won’t stop her.”
-- Emperor Prathek: “Then bring me the science-shaped candles!”
+- Emperor Prathek: “Especially the number-shaped ones. Without them, Catherine cannot do mathematics!”
+- Mayor Twistopher: “She teaches math and science. Taking only the math ones won’t stop her.”
+- Emperor Prathek: “Then take the science-shaped ones as well!”
 
 ### Scene 4
 
@@ -91,11 +91,13 @@ These candidates preserve the existing beat counts.
 
 ### Scene 5
 
-- Little Loop: “We loaded your Egg Sling.”
-- Cath: “How many eggs?”
-- Little Loop: “Six. There were eight before breakfast.”
-- Keep Cath agreeing to save the town.
-- Replace Prathek’s interruption with Little Loop: “We’ll leave out the sigh when we tell this story.”
+- Auntie Saltina: “Does that mean you’ll help us?”
+- Cath: “He caged my friends and ruined my one quiet birthday.”
+- Little Loop: “So… yes?”
+- Cath: “Bring me my helmet and the Egg Sling.”
+- Auntie Saltina: “Should we warn him?”
+- Cath: “Yes. He’ll need the head start.”
+- Little Loop: “That is the most reassuring threat I’ve ever heard.”
 
 ### Level 2
 
@@ -116,6 +118,11 @@ These candidates preserve the existing beat counts.
 - Cath: “You were the loudest prisoner.”
 - Little Loop: “I was maintaining morale.”
 - Cath: “Yours, specifically.”
+
+### Baker Braidley rescue
+
+- Baker Braidley: “The throne room is ahead. Also, he’s doing arithmetic with the stolen candles.”
+- Cath: “Then I’ll correct him personally.”
 
 ### Prathek boss introduction
 

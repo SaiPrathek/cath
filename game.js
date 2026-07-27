@@ -30,9 +30,9 @@ const STORY = [
   {image:'story3',kicker:'The Great Sprinkle Raid',title:'Prathek cancels the party',text:'Emperor Prathek confiscates the Salt Crystals and birthday candles, then cages the Pretzel People for good measure.',pan:[0,0],beats:[
     ['Emperor Prathek Donutwell','Take the Salt Crystals! Capture the Pretzel People! Confiscate the birthday candles!'],
     ['Sir Sprinkles','All of them, Your Imperial Glaze?'],
-    ['Emperor Prathek Donutwell','Especially the number-shaped ones. Catherine uses mathematics to aim that Egg Sling!'],
-    ['Mayor Twistopher','She teaches math and science. Taking candles won’t stop her.'],
-    ['Emperor Prathek Donutwell','Then bring me the science-shaped candles!',true]
+    ['Emperor Prathek Donutwell','Especially the number-shaped ones. Without them, Catherine cannot do mathematics!'],
+    ['Mayor Twistopher','She teaches math and science. Taking only the math ones won’t stop her.'],
+    ['Emperor Prathek Donutwell','Then take the science-shaped ones as well!',true]
   ]},
   {image:'story4',kicker:'Meanwhile • at Cath’s cottage',title:'The extremely dramatic knock',text:'Three escapees find Cath Crumbwell, the curly-haired birthday girl herself, enjoying one final quiet minute.',pan:[0,0],beats:[
     ['Cath Crumbwell','If this is about the noise complaint, my toaster has legal representation.'],
@@ -46,13 +46,13 @@ const STORY = [
     ['Cath Crumbwell','That sounds personal.',true]
   ]},
   {image:'story5',kicker:'One heroic sigh later',title:'The hero sets out',text:'Catherine equips her helmet, cape, shield, and Egg Sling—and reluctantly begins looking heroic.',pan:[0,0],beats:[
-    ['Auntie Saltina','Twistwick needs a hero.'],
-    ['Cath Crumbwell','Twistwick needs better security.'],
-    ['Little Loop','We loaded your Egg Sling.'],
-    ['Cath Crumbwell','How many eggs?'],
-    ['Little Loop','Six. There were eight before breakfast.'],
-    ['Cath Crumbwell','Fine. I’ll save the town, the pretzels, and my birthday.',true],
-    ['Little Loop','We’ll leave out the sigh when we tell this story.',true]
+    ['Auntie Saltina','Does that mean you’ll help us?'],
+    ['Cath Crumbwell','He caged my friends and ruined my one quiet birthday.'],
+    ['Little Loop','So… yes?'],
+    ['Cath Crumbwell','Bring me my helmet and the Egg Sling.'],
+    ['Auntie Saltina','Should we warn him?'],
+    ['Cath Crumbwell','Yes. He’ll need the head start.',true],
+    ['Little Loop','That is the most reassuring threat I’ve ever heard.',true]
   ]}
 ];
 
@@ -196,7 +196,7 @@ function updateProjectiles(dt){for(const p of projectiles){p.x+=p.vx*dt;p.y+=p.v
 function hitEnemy(e,p){if(e.kind==='prathek'){e.hp--;e.flash=.18;burst(p.x,p.y,'#f0a2c0',14);shake();tone(170,.08,'square');if(e.phase===1&&e.hp===3){e.phase=2;e.state='roll';queueDialogue([["Emperor Prathek Donutwell",null,"Enough! Behold the unstoppable force of angular momentum!"],["Cath Crumbwell",null,"You stopped moving to announce it."],["Emperor Prathek Donutwell",null,"Dramatic pauses do not count!"]]);return}if(e.hp<=0)defeatBoss(e);updateHud();return}
   e.hp--;e.flash=.15;burst(p.x,p.y,'#fff0c8',8);if(e.hp<=0){e.dead=true;updateHud();tone(160,.12,'sawtooth');if(e.kind==='sprinkles'){cages.filter(c=>c.saved).forEach(c=>{c.celebrateClock=3;c.emotion='cheer'});queueDialogue([["Sir Sprinkles",null,"I have been… thoroughly egged."],["Cath Crumbwell",null,"You fought bravely."],["Sir Sprinkles",null,"Truly?"],["Cath Crumbwell",null,"No. But you looked like you needed that."]]);}}}
 function defeatBoss(e){e.dead=true;hide(ui.bossHud);cages.filter(c=>c.saved).forEach(c=>{c.celebrateClock=3;c.emotion='cheer'});updateHud();for(let i=0;i<70;i++)burst(e.x+e.w/2,e.y+e.h/2,['#f4bb4f','#e75f7b','#8b72bd'][i%3],1);queueDialogue([["Emperor Prathek Donutwell",null,"Enjoy your victory, Catherine. I shall return!"],["Cath Crumbwell",null,"Take your time. Sudden movements are dangerous at your age."],["Emperor Prathek Donutwell",null,"I am not old!"],["Cath Crumbwell",null,"Your knees made the boss music when you stood up."],["Little Loop",null,"Should we fetch the royal heating pad?"]]);tone(90,.4,'sawtooth')}
-function rescueDialogue(name){return name==='Mayor Twistopher'?[["Mayor Twistopher",null,"Cath! You came!"],["Cath Crumbwell",null,"Apparently I’m very predictable."],["Mayor Twistopher",null,"Emperor Prathek took the others to the Sprinkleworks."]]:name==='Knottingham'?[["Knottingham",null,"Cath! My escape plan worked perfectly."],["Cath Crumbwell",null,"Your escape plan was me."]]:name==='Auntie Saltina'?[["Auntie Saltina",null,"The Egg Sling suits you."],["Cath Crumbwell",null,"It clashes with the helmet, but I’ll survive."]]:name==='Baker Braidley'?[["Baker Braidley",null,"The throne room is ahead. Also, he’s doing arithmetic with the stolen candles."],["Cath Crumbwell",null,"This just became an educational emergency."]]:[["Little Loop",null,"You found me!"],["Cath Crumbwell",null,"You were the loudest prisoner."],["Little Loop",null,"I was maintaining morale."],["Cath Crumbwell",null,"Yours, specifically."]]}
+function rescueDialogue(name){return name==='Mayor Twistopher'?[["Mayor Twistopher",null,"Cath! You came!"],["Cath Crumbwell",null,"Apparently I’m very predictable."],["Mayor Twistopher",null,"Emperor Prathek took the others to the Sprinkleworks."]]:name==='Knottingham'?[["Knottingham",null,"Cath! My escape plan worked perfectly."],["Cath Crumbwell",null,"Your escape plan was me."]]:name==='Auntie Saltina'?[["Auntie Saltina",null,"The Egg Sling suits you."],["Cath Crumbwell",null,"It clashes with the helmet, but I’ll survive."]]:name==='Baker Braidley'?[["Baker Braidley",null,"The throne room is ahead. Also, he’s doing arithmetic with the stolen candles."],["Cath Crumbwell",null,"Then I’ll correct him personally."]]:[["Little Loop",null,"You found me!"],["Cath Crumbwell",null,"You were the loudest prisoner."],["Little Loop",null,"I was maintaining morale."],["Cath Crumbwell",null,"Yours, specifically."]]}
 function rescue(c){c.saved=true;c.rescueClock=2;c.emotion='cheer';c.followX=c.x+29;c.followY=c.y+42;totalRescued++;burst(c.x+29,c.y+35,'#f6cf55',22);tone(820,.15,'triangle');setTimeout(()=>tone(1040,.18,'triangle'),100);say(c.name+' rescued!');updateHud();queueDialogue(rescueDialogue(c.name))}
 function finishLevel(){if(scene!=='play')return;if(levelIndex<LEVELS.length-1){scene='transition';document.querySelector('.game-card').classList.add('flash');setTimeout(()=>{document.querySelector('.game-card').classList.remove('flash');showLevelIntro(levelIndex+1)},400)}else showVictory()}
 function showVictory(){scene='victory';hide(ui.dialogue);hide(ui.dialogueReview);hide(ui.hud);hide(ui.controls);hide(ui.bossHud);hideOverlays();ui.actLabel.textContent='FINAL CHAPTER';ui.levelLabel.textContent='Twistwick Saved';ui.victoryImage.src=images.victory.src;show(ui.victoryScreen);confetti(100);tone(523,.15);setTimeout(()=>tone(659,.15),160);setTimeout(()=>tone(784,.3),320)}
