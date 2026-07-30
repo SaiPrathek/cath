@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Build deterministic, palette-limited assets for Bagel Quest."""
+import argparse
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageOps
 
@@ -327,10 +328,95 @@ def build_gates():
     out.save(ASSETS / "gates.png", optimize=True)
 
 
+def build_gameplay_props():
+    """Build supplemental mechanics without touching bespoke production art."""
+    out = Image.new("RGBA", (256, 128), (0, 0, 0, 0))
+
+    conveyor = Image.new("RGBA", (48, 16), (0, 0, 0, 0))
+    d = ImageDraw.Draw(conveyor)
+    px(d, (0, 3, 47, 15), "#55354f", INK, 2)
+    px(d, (2, 1, 45, 7), "#c48a3d", INK, 1)
+    for x in (5, 21, 37):
+        d.polygon([(x, 3), (x + 7, 3), (x + 11, 6), (x + 7, 9), (x, 9)], fill=CREAM, outline=INK)
+    out.alpha_composite(conveyor, (0, 0))
+
+    def vent(state):
+        image = Image.new("RGBA", (32, 48), (0, 0, 0, 0))
+        draw = ImageDraw.Draw(image)
+        px(draw, (2, 29, 29, 47), "#6c435b", INK, 2)
+        px(draw, (5, 32, 26, 39), "#c48a3d", INK)
+        for x in (8, 15, 22):
+            px(draw, (x, 35, x + 3, 44), "#251a32")
+        if state in ("warn", "on"):
+            color = GOLD_HI if state == "warn" else CREAM
+            for x, y, height in ((7, 18, 9), (14, 8, 18), (21, 15, 11)):
+                px(draw, (x, y, x + 4, y + height), color, INK)
+        if state == "on":
+            px(draw, (10, 1, 21, 8), PINK, INK)
+        return image
+
+    out.alpha_composite(vent("off"), (48, 0))
+    out.alpha_composite(vent("warn"), (80, 0))
+    out.alpha_composite(vent("on"), (112, 0))
+
+    def switch_overlay(active):
+        image = Image.new("RGBA", (32, 48), (0, 0, 0, 0))
+        draw = ImageDraw.Draw(image)
+        color = GOLD_HI if active else SILVER_DARK
+        px(draw, (1, 1, 30, 46), None, color, 2)
+        if active:
+            px(draw, (4, 4, 7, 7), CREAM)
+            px(draw, (24, 4, 27, 7), CREAM)
+        return image
+
+    out.alpha_composite(switch_overlay(False), (144, 0))
+    out.alpha_composite(switch_overlay(True), (176, 0))
+
+    portcullis = Image.new("RGBA", (48, 128), (0, 0, 0, 0))
+    d = ImageDraw.Draw(portcullis)
+    px(d, (0, 0, 47, 12), "#4a385b", INK, 2)
+    for x in (5, 16, 27, 38):
+        px(d, (x, 8, x + 6, 116), "#777181", INK)
+        d.polygon([(x, 116), (x + 3, 127), (x + 6, 116)], fill=SILVER_HI, outline=INK)
+    for y in (38, 76):
+        px(d, (1, y, 46, y + 6), GOLD, INK)
+    out.alpha_composite(portcullis, (208, 0))
+
+    warning = Image.new("RGBA", (32, 32), (0, 0, 0, 0))
+    d = ImageDraw.Draw(warning)
+    d.polygon([(16, 1), (30, 28), (2, 28)], fill=GOLD_HI, outline=INK)
+    px(d, (14, 8, 18, 19), INK)
+    px(d, (14, 23, 18, 26), INK)
+    out.alpha_composite(warning, (0, 48))
+
+    def candle(label):
+        image = Image.new("RGBA", (32, 48), (0, 0, 0, 0))
+        draw = ImageDraw.Draw(image)
+        px(draw, (5, 15, 26, 46), "#f0c36a", INK, 2)
+        px(draw, (8, 18, 23, 42), CREAM)
+        draw.text((10 if label != "+" else 8, 20), label, fill=INK)
+        draw.polygon([(16, 1), (10, 12), (16, 16), (22, 12)], fill=PINK, outline=INK)
+        return image
+
+    out.alpha_composite(candle("2"), (32, 48))
+    out.alpha_composite(candle("+"), (64, 48))
+    out.alpha_composite(candle("4"), (96, 48))
+    out.save(ASSETS / "gameplay-props-v1.png", optimize=True)
+
+
 if __name__ == "__main__":
     ASSETS.mkdir(parents=True, exist_ok=True)
-    story_assets()
-    build_atlas()
-    build_tiles()
-    build_gates()
-    print("Built story panels, sprite atlas, frame manifest, tiles, and themed gates.")
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--legacy",
+        action="store_true",
+        help="Also rebuild legacy story, character, tile, and gate assets.",
+    )
+    args = parser.parse_args()
+    build_gameplay_props()
+    if args.legacy:
+        story_assets()
+        build_atlas()
+        build_tiles()
+        build_gates()
+    print("Built supplemental gameplay props without overwriting bespoke production art.")
