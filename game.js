@@ -1,5 +1,5 @@
-/* Replace # with the real Auntie Anne's gift-card URL before sharing. */
-const GIFT_LINK = '#';
+/* Tracked redirect to the Auntie Anne's gift card. */
+const GIFT_LINK = 'https://bit.ly/4pN1nCx';
 const MUSIC_FILE = '/cath/assets/Cath.m4a';
 const canvas = document.querySelector('#game');
 const ctx = canvas.getContext('2d');
