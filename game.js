@@ -1,5 +1,5 @@
-/* Tracked redirect to the Auntie Anne's gift card. */
-const GIFT_LINK = 'https://bit.ly/4pN1nCx';
+/* Direct Auntie Anne's eGift-card link. */
+const GIFT_LINK = 'https://eGft.in/ltVNR-pxXgn1QuW';
 const MUSIC_FILE = '/cath/assets/Cath.m4a';
 const canvas = document.querySelector('#game');
 const ctx = canvas.getContext('2d');
