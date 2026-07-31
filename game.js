@@ -10,13 +10,14 @@ const GROUND_Y = 460;
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarsePointer = matchMedia('(pointer: coarse)');
 const portraitPhone = matchMedia('(orientation: portrait) and (max-width: 700px)');
+const compactLandscape = matchMedia('(max-height: 600px) and (orientation: landscape)');
 ctx.imageSmoothingEnabled = false;
 
 const ui = Object.fromEntries([
   'loadingScreen', 'loadingStatus', 'retryLoad', 'titleScreen', 'storyScreen',
   'storyImage', 'storyDialogue', 'storySpeaker', 'storyBeatDots',
   'storyPortraitCanvas', 'levelScreen', 'tutorialScreen', 'victoryScreen',
-  'victoryImage', 'endingScreen', 'pauseScreen', 'hud', 'controls', 'dialogue',
+  'victoryImage', 'endingScreen', 'pauseScreen', 'hud', 'controls', 'controlsRight', 'dialogue',
   'dialogueReview', 'toast', 'bossHud', 'actLabel', 'levelLabel', 'hearts',
   'cream', 'rescued', 'globalRescued', 'goalPill', 'bossName', 'bossBar',
   'bossHint', 'storyKicker', 'storyTitle', 'storyText', 'storyQuote',
@@ -128,160 +129,102 @@ const LEVELS = [
     id: 'commons',
     act: 'ACT I',
     name: 'Crumbly Commons',
-    desc: 'Toast country: scenic, crumbly, and currently occupied by armed donuts.',
+    desc: 'A journey through toast country, where several overconfident donut patrols guard the road.',
     mission: 'Rescue Mayor Twistopher • Reach the bakery gate',
-    width: 3000,
-    start: {x: 80, y: 398},
-    exit: 2905,
+    width: 3600,
+    start: {x: 90, y: 360},
+    exit: 3480,
     theme: 'meadow',
-    grounds: [
-      {x: 0, y: 460, w: 700, h: 90},
-      {x: 820, y: 460, w: 650, h: 90},
-      {x: 1590, y: 460, w: 720, h: 90},
-      {x: 2430, y: 460, w: 570, h: 90},
-    ],
+    grounds: [{x: 0, y: 460, w: 3600, h: 90}],
     platforms: [
-      {x: 330, y: 390, w: 220, h: 24},
-      {x: 1010, y: 388, w: 230, h: 24},
-      {x: 1780, y: 380, w: 260, h: 24},
-      {x: 2580, y: 392, w: 170, h: 24},
+      {x: 1250, y: 428, w: 400, h: 32},
+      {x: 2000, y: 428, w: 450, h: 32},
+      {x: 3000, y: 428, w: 300, h: 32},
     ],
-    hazards: [
-      {type: 'pit', x: 700, y: 460, w: 120, h: 80},
-      {type: 'pit', x: 1470, y: 460, w: 120, h: 80},
-      {type: 'pit', x: 2310, y: 460, w: 120, h: 80},
-    ],
-    cages: [{x: 1870, y: 308, name: 'Mayor Twistopher'}],
-    checkpoints: [{x: 900, y: 398}, {x: 2170, y: 398}],
+    hazards: [],
+    cages: [{x: 2150, y: 353, name: 'Mayor Twistopher'}],
+    checkpoints: [{x: 1900, y: 360}],
     enemies: [
-      {x: 570, y: 402, kind: 'scout', patrol: 100},
-      {x: 1120, y: 330, kind: 'archer', patrol: 50},
-      {x: 1660, y: 402, kind: 'scout', patrol: 90},
-      {x: 2590, y: 406, kind: 'roller', patrol: 110},
+      {x: 750, y: 400, kind: 'scout', patrol: 85},
+      {x: 1450, y: 368, kind: 'archer', patrol: 55},
+      {x: 2850, y: 400, kind: 'roller', patrol: 85},
     ],
     switches: [],
     barriers: [],
     boss: null,
-    decor: [
-      {x: 420, type: 'wheat'}, {x: 980, type: 'banner'},
-      {x: 1700, type: 'wheat'}, {x: 2510, type: 'banner'},
-    ],
+    decor: [{x: 520, type: 'wheat'}, {x: 1680, type: 'banner'}, {x: 2920, type: 'wheat'}],
   },
   {
     id: 'factory',
     act: 'ACT II',
     name: 'Sprinkleworks',
-    desc: 'A frosting refinery powered by brass gears, bad judgment, and unionized sprinkles.',
-    mission: 'Rescue Knottingham and Saltina • Defeat Sir Sprinkles',
-    width: 3800,
-    start: {x: 70, y: 398},
-    exit: 3720,
+    desc: 'The Donut Legion’s noisy factory, powered by brass gears, hot frosting, and questionable decisions.',
+    mission: 'Rescue two pretzels • Defeat Sir Sprinkles',
+    width: 5320,
+    start: {x: 80, y: 360},
+    exit: 5200,
     theme: 'factory',
-    grounds: [
-      {x: 0, y: 460, w: 850, h: 90},
-      {x: 950, y: 460, w: 750, h: 90},
-      {x: 1800, y: 460, w: 850, h: 90},
-      {x: 2750, y: 460, w: 1050, h: 90},
-    ],
+    grounds: [{x: 0, y: 460, w: 5320, h: 90}],
     platforms: [
-      {x: 350, y: 402, w: 300, h: 24, type: 'conveyor', dir: 1, speed: 80},
-      {x: 1050, y: 390, w: 360, h: 24, type: 'conveyor', dir: -1, speed: 90},
-      {x: 1990, y: 360, w: 260, h: 24},
-      {x: 2860, y: 394, w: 240, h: 24, type: 'conveyor', dir: 1, speed: 105},
+      {x: 1350, y: 428, w: 450, h: 32},
+      {x: 2200, y: 428, w: 400, h: 32},
+      {x: 3000, y: 428, w: 500, h: 32},
+      {x: 3700, y: 428, w: 400, h: 32},
     ],
-    hazards: [
-      {type: 'pit', x: 850, y: 460, w: 100, h: 80},
-      {type: 'pit', x: 1700, y: 460, w: 100, h: 80},
-      {type: 'pit', x: 2650, y: 460, w: 100, h: 80},
-      {type: 'vent', x: 700, y: 412, w: 42, h: 48, cycle: 3.1, phase: 0},
-      {type: 'vent', x: 1500, y: 412, w: 42, h: 48, cycle: 3.1, phase: 1.2},
-      {type: 'vent', x: 2450, y: 412, w: 42, h: 48, cycle: 2.8, phase: .5},
-      {type: 'vent', x: 2970, y: 346, w: 42, h: 48, cycle: 2.7, phase: 1.4},
-    ],
+    hazards: [],
     cages: [
-      {x: 1280, y: 318, name: 'Knottingham'},
-      {x: 2240, y: 388, name: 'Auntie Saltina'},
+      {x: 1600, y: 353, name: 'Knottingham'},
+      {x: 3200, y: 353, name: 'Auntie Saltina'},
     ],
-    checkpoints: [{x: 980, y: 398}, {x: 2540, y: 398}, {x: 3100, y: 398}],
+    checkpoints: [{x: 2750, y: 360}],
     enemies: [
-      {x: 520, y: 402, kind: 'scout', patrol: 100},
-      {x: 1140, y: 332, kind: 'archer', patrol: 50},
-      {x: 1580, y: 406, kind: 'roller', patrol: 80},
-      {x: 2050, y: 302, kind: 'archer', patrol: 45},
-      {x: 2500, y: 402, kind: 'scout', patrol: 100},
-      {x: 2890, y: 406, kind: 'roller', patrol: 80},
+      {x: 800, y: 400, kind: 'scout', patrol: 85},
+      {x: 2400, y: 368, kind: 'archer', patrol: 55},
+      {x: 3900, y: 368, kind: 'roller', patrol: 85},
     ],
     switches: [],
     barriers: [],
     boss: {
-      kind: 'sprinkles', x: 3430, y: 378, hp: 6,
-      arena: {start: 3140, end: 3690},
+      kind: 'sprinkles', x: 4850, y: 378, hp: 4,
+      arena: {start: 4500, end: 5260},
     },
-    decor: [
-      {x: 420, type: 'pipe'}, {x: 1240, type: 'gear'},
-      {x: 2130, type: 'pipe'}, {x: 3000, type: 'gear'},
-    ],
+    decor: [{x: 720, type: 'pipe'}, {x: 2120, type: 'gear'}, {x: 3820, type: 'pipe'}],
   },
   {
     id: 'gauntlet',
     act: 'ACT III',
     name: 'The Glazed Gauntlet',
-    desc: 'Prathek’s theatrical fortress: poor arithmetic, excellent curtain budget.',
-    mission: 'Rescue Braidley and Little Loop • Defeat Emperor Prathek',
-    width: 4200,
-    start: {x: 70, y: 398},
-    exit: 4120,
+    desc: 'Emperor Prathek’s theatrical fortress, ending in a royal showdown with one extremely dramatic donut.',
+    mission: 'Rescue the final two pretzels • Defeat Emperor Prathek',
+    width: 5920,
+    start: {x: 70, y: 360},
+    exit: 5800,
     theme: 'castle',
-    grounds: [
-      {x: 0, y: 460, w: 780, h: 90},
-      {x: 900, y: 460, w: 800, h: 90},
-      {x: 1810, y: 460, w: 850, h: 90},
-      {x: 2780, y: 460, w: 1420, h: 90},
-    ],
+    grounds: [{x: 0, y: 460, w: 5920, h: 90}],
     platforms: [
-      {x: 350, y: 388, w: 230, h: 24},
-      {x: 1010, y: 380, w: 260, h: 24},
-      {x: 1420, y: 350, w: 220, h: 24},
-      {x: 1940, y: 390, w: 250, h: 24},
-      {x: 2380, y: 350, w: 210, h: 24},
-      {x: 2900, y: 390, w: 240, h: 24},
+      {x: 1450, y: 428, w: 500, h: 32},
+      {x: 2350, y: 428, w: 400, h: 32},
+      {x: 3150, y: 428, w: 500, h: 32},
+      {x: 4050, y: 428, w: 400, h: 32},
     ],
-    hazards: [
-      {type: 'pit', x: 780, y: 460, w: 120, h: 80},
-      {type: 'pit', x: 1700, y: 460, w: 110, h: 80},
-      {type: 'pit', x: 2660, y: 460, w: 120, h: 80},
-      {type: 'boulder', x: 1080, y: 426, w: 34, h: 34, range: 230, speed: 115, phase: 0},
-      {type: 'boulder', x: 2300, y: 426, w: 34, h: 34, range: 280, speed: 135, phase: 1.4},
-      {type: 'boulder', x: 3010, y: 426, w: 34, h: 34, range: 160, speed: 145, phase: .8},
-    ],
+    hazards: [],
     cages: [
-      {x: 1480, y: 278, name: 'Baker Braidley'},
-      {x: 2870, y: 388, name: 'Little Loop'},
+      {x: 1700, y: 353, name: 'Baker Braidley'},
+      {x: 3400, y: 353, name: 'Little Loop'},
     ],
-    checkpoints: [{x: 940, y: 398}, {x: 1740, y: 398}, {x: 3060, y: 398}, {x: 3450, y: 398}],
+    checkpoints: [{x: 2150, y: 360}, {x: 3900, y: 360}],
     enemies: [
-      {x: 560, y: 402, kind: 'scout', patrol: 100},
-      {x: 1200, y: 402, kind: 'roller', patrol: 80},
-      {x: 1520, y: 292, kind: 'archer', patrol: 45},
-      {x: 2070, y: 332, kind: 'archer', patrol: 55},
-      {x: 2480, y: 402, kind: 'scout', patrol: 100},
-      {x: 3000, y: 406, kind: 'roller', patrol: 100},
+      {x: 850, y: 400, kind: 'scout', patrol: 85},
+      {x: 2550, y: 368, kind: 'archer', patrol: 55},
+      {x: 4250, y: 368, kind: 'roller', patrol: 85},
     ],
-    switches: [
-      {id: 'two-a', label: '2', order: 0, x: 480, y: 412, w: 32, h: 48},
-      {id: 'plus', label: '+', order: 1, x: 1040, y: 332, w: 32, h: 48},
-      {id: 'two-b', label: '2', order: 2, x: 1880, y: 412, w: 32, h: 48},
-      {id: 'four', label: '4', order: 3, x: 2520, y: 302, w: 32, h: 48},
-    ],
-    barriers: [{x: 2680, y: 330, w: 48, h: 130, requires: ['two-a', 'plus', 'two-b', 'four']}],
+    switches: [],
+    barriers: [],
     boss: {
-      kind: 'prathek', x: 3820, y: 350, hp: 6,
-      arena: {start: 3500, end: 4090},
+      kind: 'prathek', x: 5350, y: 350, hp: 6,
+      arena: {start: 5000, end: 5860},
     },
-    decor: [
-      {x: 450, type: 'chain'}, {x: 1330, type: 'banner'},
-      {x: 2210, type: 'chain'}, {x: 3180, type: 'banner'},
-    ],
+    decor: [{x: 820, type: 'chain'}, {x: 2520, type: 'banner'}, {x: 4320, type: 'chain'}],
   },
 ];
 
@@ -293,11 +236,11 @@ const BARKS = {
     ],
     [
       ['Cath Crumbwell', 'A factory powered by sprinkles. Somehow not the strangest Wednesday I have had.'],
-      ['Auntie Saltina', 'The frosting vents flash before they fire. Try observing things.'],
+      ['Auntie Saltina', 'Sir Sprinkles guards the far gate. He rehearses his entrances.'],
     ],
     [
-      ['Little Loop', 'The candles are trying to say two plus two equals four.'],
-      ['Cath Crumbwell', 'At last: a fortress with a correctable mistake.'],
+      ['Little Loop', 'That is definitely Prathek’s fortress.'],
+      ['Cath Crumbwell', 'The giant crown on the roof gave it away.'],
     ],
   ],
   rescue: {
@@ -398,8 +341,9 @@ function hideOverlays() {
 function syncChrome() {
   const playing = scene === 'play';
   document.querySelector('.game-card')?.classList.toggle('is-playing', playing);
-  const useTouch = playing && coarsePointer.matches && !portraitPhone.matches;
+  const useTouch = playing && (coarsePointer.matches || compactLandscape.matches) && !portraitPhone.matches;
   ui.controls?.classList.toggle('hidden', !useTouch);
+  ui.controlsRight?.classList.toggle('hidden', !useTouch);
   ui.pauseButton?.setAttribute('aria-hidden', String(!playing));
 }
 
@@ -646,9 +590,9 @@ function makeCage(config, id) {
 
 function makeEnemy(config, id) {
   const sizes = {
-    scout: {w: 50, h: 58, hp: 1, speed: 34},
-    archer: {w: 50, h: 58, hp: 1, speed: 18},
-    roller: {w: 54, h: 54, hp: 2, speed: 32},
+    scout: {w: 50, h: 58, hp: 1, speed: 30},
+    archer: {w: 50, h: 58, hp: 1, speed: 30},
+    roller: {w: 54, h: 54, hp: 2, speed: 48},
   };
   const size = sizes[config.kind];
   return {
@@ -665,7 +609,8 @@ function makeBoss(config) {
     ...config, w: prathek ? 105 : 76, h: prathek ? 105 : 82,
     maxHp: config.hp, baseX: config.x, baseY: config.y,
     dir: -1, dead: false, flash: 0, phase: 1,
-    state: 'dormant', timer: 0, attackCount: 0,
+    speed: prathek ? 75 : 48, patrol: config.patrol || 180,
+    state: 'idle', timer: 0, attackCount: 0,
     active: false, introShown: false, targetX: config.x,
     animation: 'walk', frame: 0, frameClock: 0,
   };
@@ -829,23 +774,21 @@ function gateIsOpen() {
 function updateHud() {
   [...ui.hearts.children].forEach((pip, index) => pip.classList.toggle('empty', index >= hero.hearts));
   ui.cream.textContent = Math.floor(hero.cream);
-  const actSaved = cages.filter((cage) => cage.saved).length;
-  ui.rescued.textContent = `${actSaved}/${levelConfig?.cages.length || 1}`;
-  ui.globalRescued.textContent = `${rescuedNames.size}/5`;
+  ui.rescued.textContent = `${rescuedNames.size}/5`;
+  if (ui.globalRescued) ui.globalRescued.textContent = '';
   if (!levelConfig) return;
   const unsaved = cages.find((cage) => !cage.saved);
   const boss = livingBoss();
-  if (switches.some((item) => !item.active)) ui.goalPill.textContent = `LIGHT 2 + 2 = 4  ${activeSwitchCount()}/4`;
-  else if (unsaved) ui.goalPill.textContent = `RESCUE ${unsaved.name.toUpperCase()} →`;
+  if (unsaved) ui.goalPill.textContent = 'FIND THE PRETZELS →';
   else if (boss) ui.goalPill.textContent = `DEFEAT ${boss.kind === 'prathek' ? 'PRATHEK' : 'SIR SPRINKLES'} →`;
-  else ui.goalPill.textContent = 'REACH THE OPEN GATE →';
+  else ui.goalPill.textContent = 'REACH THE GATE →';
   if (boss && boss.active) {
     show(ui.bossHud);
     ui.bossName.textContent = boss.kind === 'prathek' ? 'EMPEROR PRATHEK' : 'SIR SPRINKLES';
     ui.bossBar.style.width = `${Math.max(0, boss.hp / boss.maxHp * 100)}%`;
     ui.bossHint.textContent = boss.kind === 'prathek' && boss.phase === 2
-      ? 'DODGE THE ROLL • ATTACK AFTER THE WALL BUMP'
-      : boss.kind === 'sprinkles' ? 'WATCH THE WARNING MARKS' : 'DODGE THE FROSTING ORBS';
+      ? 'WATCH THE ROYAL ROLL'
+      : boss.kind === 'sprinkles' ? 'BREAK THE GUARD' : 'DODGE THE FROSTING ORB';
   } else hide(ui.bossHud);
 }
 
@@ -908,10 +851,6 @@ function constrainBarriers(previousX) {
       hero.x = barrier.x + barrier.w;
       hero.vx = 0;
     }
-  }
-  const boss = livingBoss();
-  if (boss?.active) {
-    hero.x = Math.max(boss.arena.start + 8, Math.min(boss.arena.end - hero.w, hero.x));
   }
 }
 
@@ -982,10 +921,7 @@ function activateCheckpoint(config, index) {
     savedNames: new Set(rescuedNames),
     switchIds: switches.filter((item) => item.active).map((item) => item.id),
   };
-  hero.hearts = 3;
-  hero.cream = 8;
-  updateHud();
-  say('Checkpoint — heroic resolve restored!');
+  say('Checkpoint: heroic resolve restored!');
   sfx('checkpoint');
 }
 
@@ -1019,10 +955,10 @@ function rebuildCurrentEncounter() {
 }
 
 function restoreCheckpoint(resetEncounter) {
-  if (resetEncounter) rebuildCurrentEncounter();
+  if (resetEncounter) projectiles = [];
   Object.assign(hero, {
     x: checkpoint.x, y: checkpoint.y, vx: 0, vy: 0,
-    hearts: 3, cream: 8, invuln: 1.25, respawnTimer: 0,
+    hearts: 3, invuln: 1.25, respawnTimer: 0,
   });
   camera = Math.max(0, checkpoint.x - W * .3);
   hide(ui.bossHud);
@@ -1082,10 +1018,14 @@ function updateEnemies(dt) {
   for (const enemy of enemies) {
     if (enemy.dead) continue;
     enemy.flash = Math.max(0, enemy.flash - dt);
-    animate(enemy, 'walk', 4, enemy.state === 'charge' || enemy.state === 'roll' ? .07 : .14, dt);
-    if (enemy.kind === 'sprinkles') updateSirSprinkles(enemy, dt);
-    else if (enemy.kind === 'prathek') updatePrathek(enemy, dt);
-    else updateRegularEnemy(enemy, dt);
+    animate(enemy, 'walk', 4, enemy.state === 'roll' ? .07 : .14, dt);
+    if (enemy.kind === 'sprinkles') {
+      updateSirSprinkles(enemy, dt);
+    } else if (enemy.kind === 'prathek') {
+      updatePrathek(enemy, dt);
+    } else {
+      patrol(enemy, dt);
+    }
   }
 }
 
@@ -1205,64 +1145,25 @@ function bossIdleChoice(boss) {
 function updateSirSprinkles(boss, dt) {
   maybeIntroduceBoss(boss);
   if (!boss.active || boss.dead) return;
-  boss.timer -= dt;
-  if (boss.state === 'idle' && boss.timer <= 0) bossIdleChoice(boss);
-  else if (boss.state === 'fanWarn' && boss.timer <= 0) {
-    spawnFan(boss);
-    boss.state = 'recover';
-    boss.timer = boss.phase === 2 ? .72 : 1.05;
-  } else if (boss.state === 'leapWarn' && boss.timer <= 0) {
-    boss.state = 'leap';
-    boss.timer = boss.phase === 2 ? .52 : .68;
-    boss.leapDuration = boss.timer;
-    boss.leapStartX = boss.x;
-  } else if (boss.state === 'leap') {
-    const progress = 1 - boss.timer / boss.leapDuration;
-    boss.x = boss.leapStartX + (boss.targetX - boss.leapStartX) * progress;
-    boss.y = boss.baseY - Math.sin(progress * Math.PI) * 155;
-    if (boss.timer <= 0) {
-      boss.y = boss.baseY;
-      burst(boss.x + boss.w / 2, boss.y + boss.h, '#f4bb4f', 18);
-      projectiles.push(
-        {x: boss.x, y: 438, w: 28, h: 16, vx: -205, vy: 0, owner: 'enemy', life: 2, kind: 'shockwave', gravity: 0},
-        {x: boss.x + boss.w, y: 438, w: 28, h: 16, vx: 205, vy: 0, owner: 'enemy', life: 2, kind: 'shockwave', gravity: 0},
-      );
-      shake();
-      boss.state = 'recover';
-      boss.timer = boss.phase === 2 ? .68 : 1.0;
-    }
-  } else if (boss.state === 'recover' && boss.timer <= 0) {
-    boss.state = 'idle';
-    boss.timer = boss.phase === 2 ? .45 : .75;
-  }
+  boss.state = 'idle';
+  patrol(boss, dt);
 }
 
 function updatePrathek(boss, dt) {
   maybeIntroduceBoss(boss);
   if (!boss.active || boss.dead) return;
-  boss.timer -= dt;
-  if (boss.state === 'idle' && boss.timer <= 0) bossIdleChoice(boss);
-  else if (boss.state === 'orbWarn' && boss.timer <= 0) {
-    spawnAimedProjectile(boss, 'orb', 215, -.12);
-    spawnAimedProjectile(boss, 'orb', 205, .12);
-    boss.state = 'recover';
-    boss.timer = 1.05;
-  } else if (boss.state === 'rollWarn' && boss.timer <= 0) {
-    boss.state = 'roll';
-    boss.timer = 1.35;
-  } else if (boss.state === 'roll') {
-    boss.x += boss.dir * 330 * dt;
-    const hitWall = boss.x <= boss.arena.start + 8 || boss.x + boss.w >= boss.arena.end - 8;
-    if (hitWall || boss.timer <= 0) {
-      boss.x = Math.max(boss.arena.start + 8, Math.min(boss.arena.end - boss.w - 8, boss.x));
-      boss.state = 'stun';
-      boss.timer = 1.35;
-      burst(boss.x + boss.w / 2, boss.y + boss.h / 2, '#ffd46b', 22);
-      shake();
-    }
-  } else if ((boss.state === 'recover' || boss.state === 'stun') && boss.timer <= 0) {
+  if (boss.phase === 1) {
     boss.state = 'idle';
-    boss.timer = boss.phase === 2 ? .48 : .8;
+    boss.x = boss.baseX + Math.sin(performance.now() / 800) * 75;
+    boss.timer -= dt;
+    if (boss.timer <= 0) {
+      spawnAimedProjectile(boss, 'orb', 205);
+      boss.timer = 1.75;
+    }
+  } else {
+    boss.state = 'roll';
+    boss.x += boss.dir * 125 * dt;
+    if (boss.x < boss.baseX - 230 || boss.x > boss.baseX + 230) boss.dir *= -1;
   }
 }
 
@@ -1356,11 +1257,6 @@ function hitEnemy(enemy, projectile) {
     hitBoss(enemy, projectile);
     return;
   }
-  if (enemy.kind === 'roller' && enemy.state !== 'recover') {
-    burst(projectile.x, projectile.y, '#b8bbc0', 7);
-    tone(120, .05, 'square');
-    return;
-  }
   enemy.hp -= 1;
   enemy.flash = .18;
   freezeTime = reducedMotion ? 0 : .045;
@@ -1374,32 +1270,13 @@ function hitEnemy(enemy, projectile) {
 
 function hitBoss(boss, projectile) {
   if (!boss.active || boss.dead) return;
-  if (boss.kind === 'prathek' && boss.phase === 2 && boss.state !== 'stun') {
-    burst(projectile.x, projectile.y, '#b8bbc0', 9);
-    if (wrongSwitchClock <= 0) {
-      queueBarks([['Cath Crumbwell', 'The crown is blocking the eggs. Wall first, dignity second.']]);
-      wrongSwitchClock = 2;
-    }
-    return;
-  }
   boss.hp -= 1;
   boss.flash = .2;
   freezeTime = reducedMotion ? 0 : .065;
   burst(projectile.x, projectile.y, '#f0a2c0', 16);
   shake();
   sfx('hit');
-  if (boss.kind === 'sprinkles' && boss.phase === 1 && boss.hp === 3) {
-    boss.phase = 2;
-    boss.active = false;
-    queueDialogue([
-      ['Sir Sprinkles', 'Very well! Commencing the advanced entrance!'],
-      ['Cath Crumbwell', 'Try not to land on the cape this time.'],
-    ], () => {
-      boss.active = true;
-      boss.state = 'idle';
-      boss.timer = .55;
-    }, 'play');
-  } else if (boss.kind === 'prathek' && boss.phase === 1 && boss.hp === 3) {
+  if (boss.kind === 'prathek' && boss.phase === 1 && boss.hp === 3) {
     boss.phase = 2;
     boss.active = false;
     queueDialogue([
@@ -1456,11 +1333,9 @@ function rescue(cage) {
   cage.followX = cage.x + 29;
   cage.followY = cage.y + 42;
   rescuedNames.add(cage.name);
-  hero.hearts = Math.min(3, hero.hearts + 1);
-  hero.cream = 8;
   burst(cage.x + 29, cage.y + 35, '#f6cf55', 24);
   sfx('rescue');
-  say(`${cage.name} rescued — hearts and eggs restored!`);
+  say(`${cage.name} rescued!`);
   queueBarks(BARKS.rescue[cage.name]);
   updateHud();
 }
@@ -2063,6 +1938,7 @@ function handleOrientation() {
 }
 portraitPhone.addEventListener?.('change', handleOrientation);
 coarsePointer.addEventListener?.('change', syncChrome);
+compactLandscape.addEventListener?.('change', syncChrome);
 
 document.querySelector('#startButton').addEventListener('click', () => { unlockAudio(); storyStart(); });
 document.querySelector('#continueButton').addEventListener('click', () => {

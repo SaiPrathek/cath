@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=31">
+  <link rel="stylesheet" href="./styles.css?v=32">
 </head>
 <body>
   <div class="cath-entry-curtain" id="cathEntryCurtain" aria-hidden="true">
@@ -42,7 +42,13 @@
         </div>
       </header>
 
-      <div class="viewport">
+      <div class="play-row">
+        <div class="touch-controls touch-controls-left hidden" id="controls" aria-label="Movement controls">
+          <button class="touch-button" data-action="left" aria-label="Move left">←</button>
+          <button class="touch-button" data-action="right" aria-label="Move right">→</button>
+        </div>
+
+        <div class="viewport">
         <canvas id="game" width="960" height="540" aria-label="Platform game canvas"></canvas>
 
         <section class="loading-card overlay" id="loadingScreen">
@@ -56,7 +62,7 @@
         <div class="hud hidden" id="hud">
           <div class="hud-card hearts" aria-label="Health"><span class="health-pips" id="hearts"><i></i><i></i><i></i></span></div>
           <div class="hud-card cream"><span class="hud-icon egg-icon" aria-hidden="true"></span><span id="cream">8</span><small>EGGS</small></div>
-          <div class="hud-card rescued"><canvas class="hud-pretzel" id="hudPretzel" width="24" height="24" aria-hidden="true"></canvas><strong id="rescued">0/1</strong><small>ACT</small><span class="global-rescued" id="globalRescued">0/5</span></div>
+          <div class="hud-card rescued"><canvas class="hud-pretzel" id="hudPretzel" width="24" height="24" aria-hidden="true"></canvas><strong id="rescued">0/5</strong><small>RESCUED</small><span class="global-rescued hidden" id="globalRescued"></span></div>
           <div class="goal-pill" id="goalPill">Find the pretzels →</div>
         </div>
 
@@ -118,7 +124,7 @@
             <div><kbd>J</kbd><span>Throw eggs</span></div>
           </div>
           <p>Break every cage, avoid touching the Donut Legion, then lead the rescued pretzels to the gate.</p>
-          <div class="tutorial-note">Watch for warning flashes — archers and bosses shoot back.</div>
+          <div class="tutorial-note">Only Emperor Prathek shoots back.</div>
           <div class="card-actions">
             <button class="text-button" id="tutorialBack">← Back</button>
             <button class="button primary" id="tutorialButton">Got it — start <b>→</b></button>
@@ -181,15 +187,11 @@
           <p class="signature">Love, Sai</p>
         </section>
 
-        <div class="touch-controls hidden" id="controls" aria-label="Touch game controls">
-          <div class="touch-move">
-            <button class="touch-button" data-action="left" aria-label="Move left">←</button>
-            <button class="touch-button" data-action="right" aria-label="Move right">→</button>
-          </div>
-          <div class="touch-actions">
-            <button class="touch-button jump" data-action="jump" aria-label="Jump">↑<small>JUMP</small></button>
-            <button class="touch-button shoot" data-action="shoot" aria-label="Throw egg"><span class="touch-egg" aria-hidden="true"></span><small>EGG</small></button>
-          </div>
+        </div>
+
+        <div class="touch-controls touch-controls-right hidden" id="controlsRight" aria-label="Action controls">
+          <button class="touch-button jump" data-action="jump" aria-label="Jump">↑<small>JUMP</small></button>
+          <button class="touch-button shoot" data-action="shoot" aria-label="Fire the Egg Sling"><span class="touch-egg" aria-hidden="true"></span><small>EGG</small></button>
         </div>
       </div>
       <footer><span>Move: A D / ← →</span><i>•</i><span>Jump: Space</span><i>•</i><span>Throw: J</span><i>•</i><span>Pause: Esc</span></footer>
@@ -204,7 +206,7 @@
   </section>
   <audio id="backgroundMusic" loop preload="metadata"></audio>
   <script src="./assets/pixel/sprite-frames.js?v=15"></script>
-  <script src="./game.js?v=35"></script>
+  <script src="./game.js?v=36"></script>
   <script>
     (() => {
       const root = document.documentElement;
