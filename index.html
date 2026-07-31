@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <base href="/cath/">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
   <meta name="theme-color" content="#24183f">
   <meta name="description" content="Catherine and the Great Pretzel Rescue — a birthday platformer by Sai.">
   <script>
@@ -18,16 +17,12 @@
       }
     })();
   </script>
-  <link rel="icon" type="image/png" href="./assets/pixel/favicon.png">
+  <link rel="icon" type="image/png" href="/cath/assets/pixel/favicon.png">
   <title>Catherine and the Great Pretzel Rescue</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
-<<<<<<< HEAD
-  <link rel="stylesheet" href="./styles.css?v=32">
-=======
-  <link rel="stylesheet" href="./styles.css?v=30">
->>>>>>> parent of 7ae7cc5 (Fix compact landscape overlay layout)
+  <link rel="stylesheet" href="/cath/styles.css?v=23">
 </head>
 <body>
   <div class="cath-entry-curtain" id="cathEntryCurtain" aria-hidden="true">
@@ -38,21 +33,12 @@
       <header class="topbar">
         <div class="brand"><canvas class="brand-mark" id="brandPortrait" width="32" height="32" aria-hidden="true"></canvas><span>Cath’s Great Pretzel Rescue</span></div>
         <div class="stage-name"><small id="actLabel">THE STORY BEGINS</small><strong id="levelLabel">Twistwick</strong></div>
-        <div class="topbar-actions">
-          <button class="icon-button pause-button" id="pauseButton" aria-label="Pause game"><span aria-hidden="true"></span></button>
-          <button class="icon-button sound-button" id="muteButton" aria-label="Mute sound" aria-pressed="false">
-            <span class="speaker-icon" aria-hidden="true"><i></i><b></b></span>
-          </button>
-        </div>
+        <button class="icon-button sound-button" id="muteButton" aria-label="Mute sound" aria-pressed="false">
+          <span class="speaker-icon" aria-hidden="true"><i></i><b></b></span>
+        </button>
       </header>
 
-      <div class="play-row">
-        <div class="touch-controls touch-controls-left hidden" id="controls" aria-label="Movement controls">
-          <button class="touch-button" data-action="left" aria-label="Move left">←</button>
-          <button class="touch-button" data-action="right" aria-label="Move right">→</button>
-        </div>
-
-        <div class="viewport">
+      <div class="viewport">
         <canvas id="game" width="960" height="540" aria-label="Platform game canvas"></canvas>
 
         <section class="loading-card overlay" id="loadingScreen">
@@ -65,12 +51,12 @@
 
         <div class="hud hidden" id="hud">
           <div class="hud-card hearts" aria-label="Health"><span class="health-pips" id="hearts"><i></i><i></i><i></i></span></div>
-          <div class="hud-card cream"><span class="hud-icon egg-icon" aria-hidden="true"></span><span id="cream">8</span><small>EGGS</small></div>
-          <div class="hud-card rescued"><canvas class="hud-pretzel" id="hudPretzel" width="24" height="24" aria-hidden="true"></canvas><strong id="rescued">0/5</strong><small>RESCUED</small><span class="global-rescued hidden" id="globalRescued"></span></div>
+          <div class="hud-card cream"><span class="hud-icon cream-icon" aria-hidden="true"></span><span id="cream">6</span><small>EGGS</small></div>
+          <div class="hud-card rescued"><canvas class="hud-pretzel" id="hudPretzel" width="24" height="24" aria-hidden="true"></canvas><strong id="rescued">0/5</strong><small>RESCUED</small></div>
           <div class="goal-pill" id="goalPill">Find the pretzels →</div>
         </div>
 
-        <div class="boss-hud hidden" id="bossHud"><span id="bossName">EMPEROR PRATHEK</span><div><i id="bossBar"></i></div><small id="bossHint"></small></div>
+        <div class="boss-hud hidden" id="bossHud"><span id="bossName">EMPEROR PRATHEK</span><div><i id="bossBar"></i></div></div>
         <div class="toast" id="toast" aria-live="polite"></div>
 
         <section class="title-card overlay hidden" id="titleScreen">
@@ -80,7 +66,7 @@
             <img class="title-cast-lineup" id="titleLineup" src="" alt="">
           </div>
           <p>Catherine Crumbwell is Twistwick’s curly-haired bagel hero, arriving just in time for trouble.</p>
-          <button class="button primary" id="startButton">Start the adventure <b>→</b></button>
+          <button class="button primary" id="startButton">Open the storybook <b>→</b></button>
           <button class="text-button" id="continueButton">Skip story &amp; play</button>
         </section>
 
@@ -145,20 +131,6 @@
         </section>
         <button class="dialogue-review hidden" id="dialogueReview">↶ Review dialogue</button>
 
-        <section class="bark hidden" id="bark" aria-live="polite">
-          <canvas id="barkPortraitCanvas" width="40" height="40" aria-hidden="true"></canvas>
-          <div><strong id="barkSpeaker">Cath Crumbwell</strong><p id="barkText"></p></div>
-        </section>
-
-        <section class="pause-card overlay hidden" id="pauseScreen" aria-labelledby="pauseTitle">
-          <p class="eyebrow">Quest paused</p>
-          <h2 id="pauseTitle">Take a heroic breather</h2>
-          <p>The Donut Legion has agreed to wait. Surprisingly professional.</p>
-          <button class="button primary" id="resumeGame">Resume <b>→</b></button>
-          <button class="text-button" id="restartAct">Restart this act</button>
-          <button class="text-button" id="returnTitle">Return to title</button>
-        </section>
-
         <section class="victory-card overlay hidden" id="victoryScreen">
           <div class="victory-art">
             <img id="victoryImage" src="" alt="Catherine celebrates after defeating Emperor Prathek while the rescued pretzels cheer">
@@ -168,9 +140,10 @@
             <h2>The crown comes off</h2>
             <p>Prathek’s crown falls over his eyes as the rescued pretzels escort him away. Twistwick is free.</p>
             <div class="victory-dialogue">
-              <strong>Emperor Prathek:</strong> “This defeat is historically inaccurate!”<br>
-              <strong>Cath:</strong> “I’ll notify the historians.”<br>
-              <strong>Little Loop:</strong> “Should we use the urgent stamp?”
+              <strong>Emperor Prathek:</strong> “I am a timeless emperor!”<br>
+              <strong>Cath:</strong> “You’re an antique donut wearing a curtain.”<br>
+              <strong>Emperor Prathek:</strong> “It is a royal cape!”<br>
+              <strong>Cath:</strong> “Sure, Grandpa Glaze.”
             </div>
             <button class="button primary" id="victoryButton">Continue to the reward <b>→</b></button>
           </div>
@@ -180,37 +153,24 @@
           <canvas class="gift-seal" id="giftPretzel" width="64" height="64" aria-hidden="true"></canvas>
           <p class="eyebrow">Quest complete • Twistwick saved</p>
           <h2>Happy Birthday,<br><em>Catherine!</em></h2>
-          <p id="endingText">You defeated the Donut Legion and rescued every Pretzel Person. The town was worth showing up for.</p>
+          <p id="endingText">You defeated the Donut Legion and rescued every Pretzel Person.</p>
           <div class="final-joke">
             <strong>Cath:</strong> “You’re rewarding me for saving pretzels… with money to eat pretzels?”<br>
             <strong>Mayor Twistopher:</strong> “We did not think this through.”<br>
-            <strong>Cath:</strong> “I’m keeping it.”
+            <strong>Cath:</strong> “Neither did Grandpa Glaze. I’m keeping it.”
           </div>
           <a class="button primary gift-button" id="giftLink" href="#" target="_blank" rel="noopener">Open the Auntie Anne’s gift <b class="pixel-gift" aria-hidden="true"></b></a>
           <button class="text-button" id="playAgain">Play the adventure again</button>
           <p class="signature">Love, Sai</p>
         </section>
 
-        </div>
-
-        <div class="touch-controls touch-controls-right hidden" id="controlsRight" aria-label="Action controls">
-          <button class="touch-button jump" data-action="jump" aria-label="Jump">↑<small>JUMP</small></button>
-          <button class="touch-button shoot" data-action="shoot" aria-label="Fire the Egg Sling"><span class="touch-egg" aria-hidden="true"></span><small>EGG</small></button>
-        </div>
       </div>
-      <footer><span>Move: A D / ← →</span><i>•</i><span>Jump: Space</span><i>•</i><span>Throw: J</span><i>•</i><span>Pause: Esc</span></footer>
+      <footer><span>Move: A D / ← →</span><i>•</i><span>Jump: Space</span><i>•</i><span>Throw: J</span></footer>
     </section>
   </main>
-  <section class="orientation-gate" id="orientationGate" aria-label="Rotate device to play">
-    <canvas id="orientationPortrait" width="48" height="48" aria-hidden="true"></canvas>
-    <p class="eyebrow">The quest needs a wider road</p>
-    <h2>Rotate to landscape</h2>
-    <p>Turn your phone sideways to rescue Twistwick.</p>
-    <span class="rotate-phone" aria-hidden="true"></span>
-  </section>
   <audio id="backgroundMusic" loop preload="metadata"></audio>
-  <script src="./assets/pixel/sprite-frames.js?v=15"></script>
-  <script src="./game.js?v=36"></script>
+  <script src="/cath/assets/pixel/sprite-frames.js?v=15"></script>
+  <script src="/cath/game.js?v=28"></script>
   <script>
     (() => {
       const root = document.documentElement;
