@@ -121,8 +121,8 @@ These candidates preserve the existing beat counts.
 
 ### Baker Braidley rescue
 
-- Baker Braidley: “The throne room is ahead. Also, he’s doing arithmetic with the stolen candles.”
-- Cath: “Then I’ll correct him personally.”
+- Baker Braidley: “The throne room is ahead. Also, he’s doing maths with the stolen candles.”
+- Cath: “Math. And I’ll correct him personally.”
 
 ### Prathek boss introduction
 
