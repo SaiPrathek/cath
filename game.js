@@ -8,7 +8,9 @@ const gameCard = document.querySelector('.game-card');
 ctx.imageSmoothingEnabled = false;
 const W = 960, H = 540;
 
-const ui = Object.fromEntries(['loadingScreen','loadingStatus','retryLoad','titleScreen','storyScreen','storyImage','storyDialogue','storySpeaker','storyBeatDots','storyPortraitCanvas','levelScreen','tutorialScreen','victoryScreen','victoryImage','endingScreen','hud','controls','dialogue','dialogueReview','toast','bossHud','actLabel','levelLabel','hearts','cream','rescued','goalPill','bossName','bossBar','storyKicker','storyTitle','storyText','storyQuote','pageNumber','levelKicker','levelTitle','levelDescription','levelMission','portraitCanvas','brandPortrait','titleLineup','hudPretzel','giftPretzel'].map(id=>[id,document.querySelector('#'+id)]));
+const ui = Object.fromEntries(['loadingScreen','loadingStatus','retryLoad','titleScreen','storyScreen','storyImage','storyDialogue','storySpeaker','storyBeatDots','storyPortraitCanvas','levelScreen','tutorialScreen','victoryScreen','victoryImage','endingScreen','hud','controls','dialogueDock','dialogue','dialogueReview','toast','bossHud','actLabel','levelLabel','hearts','cream','rescued','goalPill','bossName','bossBar','storyKicker','storyTitle','storyText','storyQuote','pageNumber','levelKicker','levelTitle','levelDescription','levelMission','portraitCanvas','brandPortrait','titleLineup','hudPretzel','giftPretzel'].map(id=>[id,document.querySelector('#'+id)]));
+const dialogueHome = document.querySelector('.viewport');
+const mobileLayoutQuery = matchMedia('(max-width:760px), (pointer:coarse) and (orientation:portrait)');
 document.querySelector('#giftLink').href = GIFT_LINK;
 const ASSET_ROOT='/cath/assets/pixel/';
 const images={};
@@ -75,8 +77,20 @@ const input={left:false,right:false,jump:false,shoot:false,jumpPress:false,shoot
 const hero={x:90,y:350,w:44,h:62,vx:0,vy:0,dir:1,onGround:false,coyote:0,jumpBuffer:0,hearts:3,cream:8,creamClock:0,shootCd:0,invuln:0,animation:'idle',frame:0,frameClock:0};
 
 function hideOverlays(){['titleScreen','storyScreen','levelScreen','tutorialScreen','victoryScreen','endingScreen'].forEach(k=>ui[k].classList.add('hidden'));}
-function show(el){el?.classList.remove('hidden');if(el===ui.controls)gameCard.classList.add('gameplay-active')}
-function hide(el){el?.classList.add('hidden');if(el===ui.controls)gameCard.classList.remove('gameplay-active')}
+function syncDialogueDock(){
+  const hasDialogue=!ui.dialogue.classList.contains('hidden'),hasReview=!ui.dialogueReview.classList.contains('hidden');
+  ui.dialogueDock.classList.toggle('active',mobileLayoutQuery.matches&&(hasDialogue||hasReview));
+  ui.dialogueDock.classList.toggle('has-dialogue',mobileLayoutQuery.matches&&hasDialogue);
+  ui.dialogueDock.classList.toggle('has-review',mobileLayoutQuery.matches&&hasReview)
+}
+function syncDialoguePlacement(){
+  const destination=mobileLayoutQuery.matches?ui.dialogueDock:dialogueHome;
+  destination.append(ui.dialogue,ui.dialogueReview);syncDialogueDock()
+}
+function show(el){el?.classList.remove('hidden');if(el===ui.controls)gameCard.classList.add('gameplay-active');if(el===ui.dialogue||el===ui.dialogueReview)syncDialogueDock()}
+function hide(el){el?.classList.add('hidden');if(el===ui.controls)gameCard.classList.remove('gameplay-active');if(el===ui.dialogue||el===ui.dialogueReview)syncDialogueDock()}
+mobileLayoutQuery.addEventListener?.('change',syncDialoguePlacement);
+syncDialoguePlacement();
 if(MUSIC_FILE){backgroundMusic.src=MUSIC_FILE;backgroundMusic.volume=.28}
 function unlockAudio(){
   try{
@@ -197,12 +211,12 @@ function updateProjectiles(dt){for(const p of projectiles){p.x+=p.vx*dt;p.y+=p.v
   }projectiles=projectiles.filter(p=>p.life>0&&p.x>-100&&p.x<level.width+100&&p.y<700)}
 function hitEnemy(e,p){if(e.kind==='prathek'){e.hp--;e.flash=.18;burst(p.x,p.y,'#f0a2c0',14);shake();tone(170,.08,'square');if(e.phase===1&&e.hp===3){e.phase=2;e.state='roll';queueDialogue([["Emperor Prathek Donutwell",null,"Enough! Behold the unstoppable force of angular momentum!"],["Cath Crumbwell",null,"You stopped moving to announce it."],["Emperor Prathek Donutwell",null,"Dramatic pauses do not count!"]]);return}if(e.hp<=0)defeatBoss(e);updateHud();return}
   e.hp--;e.flash=.15;burst(p.x,p.y,'#fff0c8',8);if(e.hp<=0){e.dead=true;updateHud();tone(160,.12,'sawtooth');if(e.kind==='sprinkles'){cages.filter(c=>c.saved).forEach(c=>{c.celebrateClock=3;c.emotion='cheer'});queueDialogue([["Sir Sprinkles",null,"I have been… thoroughly egged."],["Cath Crumbwell",null,"You fought bravely."],["Sir Sprinkles",null,"Truly?"],["Cath Crumbwell",null,"No. But you looked like you needed that."]]);}}}
-function defeatBoss(e){e.dead=true;hide(ui.bossHud);cages.filter(c=>c.saved).forEach(c=>{c.celebrateClock=3;c.emotion='cheer'});updateHud();for(let i=0;i<70;i++)burst(e.x+e.w/2,e.y+e.h/2,['#f4bb4f','#e75f7b','#8b72bd'][i%3],1);queueDialogue([["Emperor Prathek Donutwell",null,"Enjoy your victory, Catherine. I shall return!"],["Cath Crumbwell",null,"Take your time. Sudden movements are dangerous at your age."],["Emperor Prathek Donutwell",null,"I am not old!"],["Cath Crumbwell",null,"Your knees made the boss music when you stood up."],["Little Loop",null,"Should we fetch the royal heating pad?"]]);tone(90,.4,'sawtooth')}
+function defeatBoss(e){e.dead=true;hide(ui.bossHud);cages.filter(c=>c.saved).forEach(c=>{c.celebrateClock=3;c.emotion='cheer'});updateHud();for(let i=0;i<70;i++)burst(e.x+e.w/2,e.y+e.h/2,['#f4bb4f','#e75f7b','#8b72bd'][i%3],1);queueDialogue([["Emperor Prathek Donutwell",null,"Enjoy your victory, Catherine. I shall return!"],["Cath Crumbwell",null,"Take your time. Sudden movements are dangerous at your age."],["Emperor Prathek Donutwell",null,"I am not old!"],["Cath Crumbwell",null,"Your knees made the boss music when you stood up."],["Little Loop",null,"Shall she sing you a lullaby, Grandpa?"]]);tone(90,.4,'sawtooth')}
 function rescueDialogue(name){return name==='Mayor Twistopher'?[["Mayor Twistopher",null,"Cath! You came!"],["Cath Crumbwell",null,"Apparently I’m very predictable."],["Mayor Twistopher",null,"Emperor Prathek took the others to the Sprinkleworks."]]:name==='Knottingham'?[["Knottingham",null,"Cath! My escape plan worked perfectly."],["Cath Crumbwell",null,"Your escape plan was me."]]:name==='Auntie Saltina'?[["Auntie Saltina",null,"The Egg Sling suits you."],["Cath Crumbwell",null,"It clashes with the helmet, but I’ll survive."]]:name==='Baker Braidley'?[["Baker Braidley",null,"The throne room is ahead. Also, he’s doing arithmetic with the stolen candles."],["Cath Crumbwell",null,"Then I’ll correct him personally."]]:[["Little Loop",null,"You found me!"],["Cath Crumbwell",null,"You were the loudest prisoner."],["Little Loop",null,"I was maintaining morale."],["Cath Crumbwell",null,"Yours, specifically."]]}
 function rescue(c){c.saved=true;c.rescueClock=2;c.emotion='cheer';c.followX=c.x+29;c.followY=c.y+42;totalRescued++;burst(c.x+29,c.y+35,'#f6cf55',22);tone(820,.15,'triangle');setTimeout(()=>tone(1040,.18,'triangle'),100);say(c.name+' rescued!');updateHud();queueDialogue(rescueDialogue(c.name))}
 function finishLevel(){if(scene!=='play')return;if(levelIndex<LEVELS.length-1){scene='transition';document.querySelector('.game-card').classList.add('flash');setTimeout(()=>{document.querySelector('.game-card').classList.remove('flash');showLevelIntro(levelIndex+1)},400)}else showVictory()}
 function showVictory(){scene='victory';hide(ui.dialogue);hide(ui.dialogueReview);hide(ui.hud);hide(ui.controls);hide(ui.bossHud);hideOverlays();ui.actLabel.textContent='FINAL CHAPTER';ui.levelLabel.textContent='Twistwick Saved';ui.victoryImage.src=images.victory.src;show(ui.victoryScreen);confetti(100);tone(523,.15);setTimeout(()=>tone(659,.15),160);setTimeout(()=>tone(784,.3),320)}
-function showRewardDialogue(){hide(ui.victoryScreen);scene='endingStory';queueDialogue([["Mayor Twistopher",null,"Cath Crumbwell, you rescued our people and saved your birthday celebration!"],["Little Loop",null,"And you replied before the crisis was over."],["Cath Crumbwell",null,"Character growth."],["Auntie Saltina",null,"Please accept Twistwick’s highest honor: an Auntie Anne’s gift card."],["Cath Crumbwell",null,"You’re rewarding me for saving pretzels… with money to eat pretzels?"],["Mayor Twistopher",null,"We did not think this through."],["Little Loop",null,"Should we take it back?"],["Cath Crumbwell",null,"Absolutely not."]],showEnding)}
+function showRewardDialogue(){hide(ui.victoryScreen);gameCard.classList.add('gameplay-active');scene='endingStory';queueDialogue([["Mayor Twistopher",null,"Cath Crumbwell, you rescued our people and saved your birthday celebration!"],["Little Loop",null,"And you replied before the crisis was over."],["Cath Crumbwell",null,"Character growth."],["Auntie Saltina",null,"Please accept Twistwick’s highest honor: an Auntie Anne’s gift card."],["Cath Crumbwell",null,"You’re rewarding me for saving pretzels… with money to eat pretzels?"],["Mayor Twistopher",null,"We did not think this through."],["Little Loop",null,"Should we take it back?"],["Cath Crumbwell",null,"Absolutely not."]],showEnding)}
 function showEnding(){scene='ending';hide(ui.dialogue);hide(ui.dialogueReview);hide(ui.hud);hide(ui.controls);hide(ui.bossHud);show(ui.endingScreen);confetti(160);tone(523,.15);setTimeout(()=>tone(659,.15),160);setTimeout(()=>tone(784,.3),320)}
 function confetti(n){for(let i=0;i<n;i++)particles.push({x:Math.random()*W,y:-Math.random()*H,vx:(Math.random()-.5)*150,vy:70+Math.random()*160,life:6,color:['#ef6380','#f3bc4d','#75b89a','#9575bd'][i%4],r:3+Math.random()*5,screen:true})}
 
