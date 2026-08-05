@@ -4,6 +4,7 @@ const MUSIC_FILE = '/cath/assets/Cath.m4a';
 const canvas = document.querySelector('#game');
 const ctx = canvas.getContext('2d');
 const backgroundMusic = document.querySelector('#backgroundMusic');
+const gameCard = document.querySelector('.game-card');
 ctx.imageSmoothingEnabled = false;
 const W = 960, H = 540;
 
@@ -74,7 +75,8 @@ const input={left:false,right:false,jump:false,shoot:false,jumpPress:false,shoot
 const hero={x:90,y:350,w:44,h:62,vx:0,vy:0,dir:1,onGround:false,coyote:0,jumpBuffer:0,hearts:3,cream:8,creamClock:0,shootCd:0,invuln:0,animation:'idle',frame:0,frameClock:0};
 
 function hideOverlays(){['titleScreen','storyScreen','levelScreen','tutorialScreen','victoryScreen','endingScreen'].forEach(k=>ui[k].classList.add('hidden'));}
-function show(el){el?.classList.remove('hidden')} function hide(el){el?.classList.add('hidden')}
+function show(el){el?.classList.remove('hidden');if(el===ui.controls)gameCard.classList.add('gameplay-active')}
+function hide(el){el?.classList.add('hidden');if(el===ui.controls)gameCard.classList.remove('gameplay-active')}
 if(MUSIC_FILE){backgroundMusic.src=MUSIC_FILE;backgroundMusic.volume=.28}
 function unlockAudio(){
   try{
@@ -231,6 +233,17 @@ function draw(){ctx.imageSmoothingEnabled=false;if(scene==='loading'||scene==='t
 function frame(t){const dt=Math.min(.034,(t-last)/1000||0);last=t;update(dt);draw();requestAnimationFrame(frame)}
 
 function pressKey(k,down){if(down&&!input[k])input[k+'Press']=true;input[k]=down}
+document.querySelectorAll('[data-control]').forEach(button=>{
+  const control=button.dataset.control;
+  const release=()=>{pressKey(control,false);button.classList.remove('pressed')};
+  button.addEventListener('pointerdown',event=>{
+    event.preventDefault();unlockAudio();button.setPointerCapture?.(event.pointerId);pressKey(control,true);button.classList.add('pressed')
+  });
+  button.addEventListener('pointerup',release);
+  button.addEventListener('pointercancel',release);
+  button.addEventListener('lostpointercapture',release);
+  button.addEventListener('contextmenu',event=>event.preventDefault())
+});
 document.querySelector('#startButton').addEventListener('click',()=>{unlockAudio();tone(520,.08);storyStart()});document.querySelector('#continueButton').addEventListener('click',()=>{unlockAudio();showLevelIntro(0)});document.querySelector('#skipStory').addEventListener('click',()=>{unlockAudio();showLevelIntro(0)});document.querySelector('#previousStory').addEventListener('click',previousStory);document.querySelector('#nextStory').addEventListener('click',nextStory);document.querySelector('#levelBack').addEventListener('click',returnToStory);document.querySelector('#tutorialBack').addEventListener('click',backFromTutorial);document.querySelector('#dialogueBack').addEventListener('click',previousDialogue);document.querySelector('#dialogueNext').addEventListener('click',advanceDialogue);ui.dialogueReview.addEventListener('click',reviewDialogue);document.querySelector('#playAgain').addEventListener('click',()=>location.reload());document.querySelector('#muteButton').addEventListener('click',e=>{unlockAudio();muted=!muted;backgroundMusic.muted=muted;e.currentTarget.classList.toggle('muted',muted);e.currentTarget.setAttribute('aria-pressed',String(muted));e.currentTarget.setAttribute('aria-label',muted?'Unmute sound':'Mute sound');if(!muted&&MUSIC_FILE)backgroundMusic.play().catch(()=>{});say(muted?'Sound muted':'Sound on')});
 document.querySelector('#levelButton').addEventListener('click',beginLevel);
 document.querySelector('#tutorialButton').addEventListener('click',startTutorialLevel);

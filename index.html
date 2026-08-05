@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#24183f">
   <meta name="description" content="Catherine and the Great Pretzel Rescue — a birthday platformer by Sai.">
   <script>
@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/cath/styles.css?v=23">
+  <link rel="stylesheet" href="/cath/styles.css?v=24">
 </head>
 <body>
   <div class="cath-entry-curtain" id="cathEntryCurtain" aria-hidden="true">
@@ -113,6 +113,11 @@
             <div><kbd>SPACE</kbd><span>Jump or dodge</span></div>
             <div><kbd>J</kbd><span>Throw eggs</span></div>
           </div>
+          <div class="touch-tutorial" aria-label="Touch controls">
+            <div><b>← →</b><span>Move</span></div>
+            <div><b>↑</b><span>Jump</span></div>
+            <div><b>●</b><span>Throw</span></div>
+          </div>
           <p>Break every cage, avoid touching the Donut Legion, then lead the rescued pretzels to the gate.</p>
           <div class="tutorial-note">Only Emperor Prathek shoots back.</div>
           <div class="card-actions">
@@ -165,12 +170,30 @@
         </section>
 
       </div>
+      <section class="mobile-controls hidden" id="controls" aria-label="Touch game controls">
+        <div class="control-group movement-controls" aria-label="Movement controls">
+          <button class="control-button" type="button" data-control="left" aria-label="Move left">
+            <b aria-hidden="true">←</b><span>LEFT</span>
+          </button>
+          <button class="control-button" type="button" data-control="right" aria-label="Move right">
+            <b aria-hidden="true">→</b><span>RIGHT</span>
+          </button>
+        </div>
+        <div class="control-group action-controls" aria-label="Action controls">
+          <button class="control-button jump-control" type="button" data-control="jump" aria-label="Jump or dodge">
+            <b aria-hidden="true">↑</b><span>JUMP</span>
+          </button>
+          <button class="control-button shoot-control" type="button" data-control="shoot" aria-label="Throw an egg">
+            <b aria-hidden="true">●</b><span>THROW</span>
+          </button>
+        </div>
+      </section>
       <footer><span>Move: A D / ← →</span><i>•</i><span>Jump: Space</span><i>•</i><span>Throw: J</span></footer>
     </section>
   </main>
   <audio id="backgroundMusic" loop preload="metadata"></audio>
   <script src="/cath/assets/pixel/sprite-frames.js?v=15"></script>
-  <script src="/cath/game.js?v=28"></script>
+  <script src="/cath/game.js?v=29"></script>
   <script>
     (() => {
       const root = document.documentElement;
